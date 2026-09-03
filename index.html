@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{margin:0;padding:0}
+body{background:#F4F8FB;color:#10263B;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:#2E6FA8;text-decoration:none}
+a:hover{color:#10263B}
+::placeholder{color:#93A7BA}
+@keyframes qcLaser{0%{transform:translateY(0)}50%{transform:translateY(76px)}100%{transform:translateY(0)}}
+@keyframes qcBill{0%{transform:translateY(-74px);opacity:0}22%{opacity:1;transform:translateY(-46px)}55%{transform:translateY(-10px)}75%{transform:translateY(6px) scaleY(.45);opacity:.9}92%{transform:translateY(12px) scaleY(.1);opacity:0}100%{transform:translateY(12px) scaleY(.1);opacity:0}}
+@keyframes qcCoin{0%{transform:translate(0,0) scale(.3);opacity:0}16%{transform:translate(34px,-30px) scale(1);opacity:1}55%{transform:translate(112px,-16px) scale(1);opacity:1}100%{transform:translate(158px,84px) scale(.5);opacity:0}}
+@keyframes qcPop{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes qcPulse{0%{box-shadow:0 0 0 0 rgba(46,158,107,.45)}70%{box-shadow:0 0 0 7px rgba(46,158,107,0)}100%{box-shadow:0 0 0 0 rgba(46,158,107,0)}}
+@keyframes qcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes qcSkel{0%,100%{opacity:.45}50%{opacity:.9}}
+@keyframes qcDash{0%{transform:translateX(-6px);opacity:0}30%{opacity:1}100%{transform:translateX(54px);opacity:0}}
+</style>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#4E9CD8"/><circle cx="60" cy="60" r="26" fill="#FFFFFF"/><text x="60" y="71" font-family="sans-serif" font-size="32" font-weight="700" fill="#F7931A" text-anchor="middle">&#8383;</text></svg></template>
+<div style="min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden">
+  <nav style="position:sticky;top:0;z-index:50;background:rgba(244,248,251,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E1EAF2">
+    <div style="max-width:1180px;margin:0 auto;padding:0 28px;height:74px;display:flex;align-items:center;gap:28px">
+      <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;flex-shrink:0">
+        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:30px;display:block">
+      </div>
+      <div style="display:flex;align-items:center;gap:22px;flex:1;font-size:15px;font-weight:500;color:#3D5570">
+        <span onClick="{{ goHow }}" style="cursor:pointer;padding:6px 2px" style-hover="color:#2E6FA8">How it works</span>
+        <span onClick="{{ goLocs }}" style="cursor:pointer;padding:6px 2px" style-hover="color:#2E6FA8">Locations</span>
+        <span onClick="{{ goFaqs }}" style="cursor:pointer;padding:6px 2px" style-hover="color:#2E6FA8">FAQs</span>
+        <span onClick="{{ goWires }}" style="{{ navWiresStyle }}" style-hover="color:#2E6FA8">Wires</span>
+      </div>
+      <sc-if value="{{ showPrice }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:8px;background:#FFF4E3;border:1px solid #F5DDB4;border-radius:999px;padding:7px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#9A5B00">
+          <span style="width:20px;height:20px;border-radius:50%;background:#F7931A;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600">&#8383;</span>
+          <span>{{ price }}</span>
+        </div>
+      </sc-if>
+      <a href="tel:12014195933" style="background:#DCEBF8;color:#2E6FA8;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;flex-shrink:0" style-hover="background:#4E9CD8;color:#FFFFFF">201&#8209;419&#8209;5933</a>
+    </div>
+  </nav>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="Home" style="display:flex;flex-direction:column">
+
+    <section style="position:relative;overflow:hidden">
+      <div style="position:absolute;right:-140px;top:-140px;width:520px;height:520px;border-radius:50%;background:#DCEBF8;opacity:.55"></div>
+      <div style="max-width:1180px;margin:0 auto;padding:84px 28px 96px;display:flex;gap:56px;align-items:center;position:relative;flex-wrap:wrap">
+        <div style="flex:1.1;min-width:420px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">
+              <div style="width:22px;height:3px;border-radius:2px;background:#4E9CD8"></div>
+              <div style="width:14px;height:3px;border-radius:2px;background:#8FC1E8"></div>
+              <div style="width:8px;height:3px;border-radius:2px;background:#C6DFF3"></div>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2E6FA8">Bitcoin ATMs &#183; Hudson County, NJ</span>
+          </div>
+          <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:64px;line-height:1.04;margin:18px 0 20px;color:#10263B;text-wrap:pretty">The easiest way to buy <span style="color:#4E9CD8">Bitcoin</span>.</h1>
+          <p style="font-size:19px;line-height:1.6;color:#4A6076;margin:0 0 30px;max-width:520px;text-wrap:pretty">Walk up with cash, walk out with bitcoin. Machines across Jersey City, Harrison and Bayonne &#8212; no account, no bank, no waiting.</p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+            <button onClick="{{ goLocs }}" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:16px 30px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:17px;cursor:pointer;box-shadow:0 12px 24px rgba(78,156,216,.35)" style-hover="background:#2E6FA8">Find a machine</button>
+            <button onClick="{{ goWires }}" style="background:#FFFFFF;color:#2E6FA8;border:1.5px solid #C6DFF3;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:17px;cursor:pointer" style-hover="border-color:#4E9CD8;color:#10263B">Buying size? Wire desk &#8594;</button>
+          </div>
+          <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:38px;font-size:13.5px;font-weight:500;color:#5C7189">
+            <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#4E9CD8"></span>FinCEN&#8209;registered MSB</span>
+            <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#4E9CD8"></span>NJ owned &amp; operated since 2018</span>
+            <sc-if value="{{ locsReady }}" hint-placeholder-val="{{ false }}">
+              <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#2E9E6B;animation:qcPulse 2s infinite"></span>{{ openCount }} machines live right now</span>
+            </sc-if>
+          </div>
+        </div>
+        <div style="flex:1;min-width:380px;position:relative">
+          <div style="border-radius:28px;overflow:hidden;box-shadow:0 32px 64px rgba(16,38,59,.22);aspect-ratio:4/3.4;position:relative">
+            <img src="assets/images/douro.jpg" alt="Lamassu Douro bitcoin machine on a store counter" style="width:100%;height:100%;object-fit:cover;display:block">
+            <div style="position:absolute;left:18px;bottom:18px;background:rgba(16,38,59,.82);backdrop-filter:blur(6px);color:#FFFFFF;border-radius:14px;padding:10px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px">
+              <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5"></span>
+              Lamassu machines at every location &#8212; this one&#8217;s the Douro
+            </div>
+          </div>
+          <sc-if value="{{ showPrice }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:-18px;right:-10px;background:#FFFFFF;border-radius:16px;box-shadow:0 16px 32px rgba(16,38,59,.18);padding:12px 18px;display:flex;align-items:center;gap:11px;animation:qcFloat 4s ease-in-out infinite">
+              <span style="width:32px;height:32px;border-radius:50%;background:#F7931A;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:600">&#8383;</span>
+              <span style="display:flex;flex-direction:column">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;color:#93A7BA">BTC &#183; LIVE</span>
+                <span style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;color:#10263B">{{ price }}</span>
+              </span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" style="background:#5599D6;position:relative;overflow:hidden">
+      <div style="position:absolute;left:-120px;bottom:-180px;width:480px;height:480px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="max-width:1180px;margin:0 auto;padding:96px 28px;position:relative">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">
+            <div style="width:22px;height:3px;border-radius:2px;background:#FFFFFF"></div>
+            <div style="width:14px;height:3px;border-radius:2px;background:rgba(255,255,255,.6)"></div>
+            <div style="width:8px;height:3px;border-radius:2px;background:rgba(255,255,255,.35)"></div>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85)">How it works</span>
+        </div>
+        <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 8px;line-height:1.1">Cash to bitcoin in under a minute.</h2>
+        <p style="color:rgba(255,255,255,.85);font-size:17px;margin:0 0 54px;max-width:560px;line-height:1.6">Three steps on the machine. First time? The screen walks you through it &#8212; or call and a human picks up.</p>
+        <div style="display:flex;gap:56px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1.05;min-width:420px;display:flex;flex-direction:column;align-items:center;gap:22px">
+            <div style="position:relative;width:520px;height:430px;max-width:100%">
+              <div style="position:absolute;left:36px;top:6px;width:296px;height:396px;background:#FFFFFF;border-radius:26px;box-shadow:0 28px 56px rgba(9,38,66,.32)">
+                <div style="position:absolute;left:24px;top:24px;width:248px;height:156px;background:#0E2A47;border-radius:14px;padding:8px;box-sizing:border-box">
+                  <div style="width:100%;height:100%;background:#2BDFC5;border-radius:8px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+                    <div style="position:absolute;left:-48px;top:-70px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.18)"></div>
+                    <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
+                      <div style="width:52px;height:52px;background:#FFFFFF;border-radius:8px;position:relative;box-shadow:0 4px 10px rgba(9,38,66,.15)">
+                        <div style="position:absolute;left:7px;top:7px;width:12px;height:12px;border:3px solid #0E2A47;border-radius:2px"></div>
+                        <div style="position:absolute;right:7px;top:7px;width:12px;height:12px;border:3px solid #0E2A47;border-radius:2px"></div>
+                        <div style="position:absolute;left:7px;bottom:7px;width:12px;height:12px;border:3px solid #0E2A47;border-radius:2px"></div>
+                        <div style="position:absolute;right:9px;bottom:9px;width:9px;height:9px;background:#0E2A47;border-radius:2px"></div>
+                      </div>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#0E2A47">SCAN YOUR WALLET</span>
+                    </sc-if>
+                    <sc-if value="{{ s1 }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-family:'Fredoka',sans-serif;font-size:34px;font-weight:600;color:#0E2A47;position:relative">$140
+                        <span style="position:absolute;right:-38px;top:-8px;background:#0E2A47;color:#2BDFC5;border-radius:8px;padding:3px 7px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;animation:qcPop .5s ease-out both .6s">+$20</span>
+                      </span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#0E2A47">INSERT BILLS</span>
+                    </sc-if>
+                    <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
+                      <div style="width:52px;height:52px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:27px;font-weight:600;color:#F7931A;animation:qcPop .5s ease-out both">&#8383;</div>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;color:#0E2A47">SENT &#10003;</span>
+                    </sc-if>
+                  </div>
+                </div>
+                <div style="position:absolute;left:50%;transform:translateX(-50%);top:198px;width:64px;height:10px;background:#E4EBF2;border-radius:5px"></div>
+                <div style="position:absolute;left:24px;bottom:38px;width:128px;height:44px;background:#DCE4EC;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                  <div style="width:88px;height:9px;background:#4C5A68;border-radius:5px"></div>
+                </div>
+                <sc-if value="{{ s1 }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;left:44px;bottom:52px;width:88px;height:40px;background:#69B98C;border:2px solid #4E9A72;border-radius:6px;display:flex;align-items:center;justify-content:center;transform-origin:bottom;animation:qcBill 1.6s ease-in-out infinite">
+                    <span style="width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.85);color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600">$</span>
+                  </div>
+                </sc-if>
+                <div style="position:absolute;right:24px;bottom:32px;width:92px;height:122px;background:#EEF3F8;border-radius:16px">
+                  <div style="position:absolute;left:10px;right:10px;top:10px;bottom:10px;background:#DEE7F0;border-radius:10px"></div>
+                  <div style="position:absolute;left:50%;transform:translateX(-50%);top:18px;width:8px;height:8px;border-radius:50%;background:#44536280"></div>
+                  <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
+                    <div style="position:absolute;left:14px;right:14px;top:20px;height:3px;background:#2BDFC5;border-radius:2px;box-shadow:0 0 14px #2BDFC5;animation:qcLaser 1.7s ease-in-out infinite"></div>
+                  </sc-if>
+                </div>
+              </div>
+              <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;left:288px;top:170px;width:36px;height:36px;border-radius:50%;background:#F7931A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;box-shadow:0 8px 18px rgba(9,38,66,.3);animation:qcCoin 2.3s ease-in-out both .15s">&#8383;</div>
+                <div style="position:absolute;left:250px;top:186px;display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+                  <div style="width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,.9);animation:qcDash 1s ease-out infinite .2s"></div>
+                  <div style="width:13px;height:3px;border-radius:2px;background:rgba(255,255,255,.6);animation:qcDash 1s ease-out infinite .45s"></div>
+                </div>
+              </sc-if>
+              <div style="position:absolute;right:12px;bottom:18px;width:88px;height:158px;background:#132E4C;border-radius:20px;padding:8px;box-sizing:border-box;box-shadow:0 18px 36px rgba(9,38,66,.35)">
+                <div style="width:100%;height:100%;background:#0A2138;border-radius:13px;display:flex;align-items:center;justify-content:center">
+                  <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
+                    <div style="width:44px;height:44px;background:#FFFFFF;border-radius:6px;position:relative">
+                      <div style="position:absolute;left:6px;top:6px;width:10px;height:10px;border:2.5px solid #0E2A47;border-radius:2px"></div>
+                      <div style="position:absolute;right:6px;top:6px;width:10px;height:10px;border:2.5px solid #0E2A47;border-radius:2px"></div>
+                      <div style="position:absolute;left:6px;bottom:6px;width:10px;height:10px;border:2.5px solid #0E2A47;border-radius:2px"></div>
+                      <div style="position:absolute;right:8px;bottom:8px;width:8px;height:8px;background:#0E2A47;border-radius:2px"></div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ s1 }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:5px">
+                      <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5;opacity:.4"></span>
+                      <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5;opacity:.7"></span>
+                      <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5"></span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
+                    <div style="width:40px;height:40px;border-radius:50%;background:#2E9E6B;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;animation:qcPop .5s ease-out both 1.9s">&#10003;</div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9);min-width:150px;text-align:right">{{ stepCaption }}</span>
+              <div style="display:flex;gap:7px;align-items:center">
+                <span onClick="{{ goStep0 }}" style="{{ dot0 }}"></span>
+                <span onClick="{{ goStep1 }}" style="{{ dot1 }}"></span>
+                <span onClick="{{ goStep2 }}" style="{{ dot2 }}"></span>
+              </div>
+            </div>
+          </div>
+          <div style="flex:1;min-width:380px;display:flex;flex-direction:column;gap:16px">
+            <div onClick="{{ goStep0 }}" style="{{ card0 }}">
+              <span style="{{ num0 }}">01</span>
+              <span style="display:flex;flex-direction:column;gap:5px">
+                <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:21px">Scan your wallet</span>
+                <span style="font-size:15px;line-height:1.55;opacity:.82">Open any bitcoin wallet app and hold its receive code up to the scanner.</span>
+              </span>
+            </div>
+            <div onClick="{{ goStep1 }}" style="{{ card1 }}">
+              <span style="{{ num1 }}">02</span>
+              <span style="display:flex;flex-direction:column;gap:5px">
+                <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:21px">Insert cash</span>
+                <span style="font-size:15px;line-height:1.55;opacity:.82">Feed in bills &#8212; the screen totals up as you go.</span>
+              </span>
+            </div>
+            <div onClick="{{ goStep2 }}" style="{{ card2 }}">
+              <span style="{{ num2 }}">03</span>
+              <span style="display:flex;flex-direction:column;gap:5px">
+                <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:21px">Get your bitcoin</span>
+                <span style="font-size:15px;line-height:1.55;opacity:.82">Confirm, and your bitcoin is on its way before you leave the store.</span>
+              </span>
+            </div>
+            <p style="color:rgba(255,255,255,.75);font-size:13.5px;margin:8px 0 0;line-height:1.6">No account needed. Verification starts with just your phone number; ID only kicks in at higher amounts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="locations" style="background:#F4F8FB">
+      <div style="max-width:1180px;margin:0 auto;padding:96px 28px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:44px">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">
+                <div style="width:22px;height:3px;border-radius:2px;background:#4E9CD8"></div>
+                <div style="width:14px;height:3px;border-radius:2px;background:#8FC1E8"></div>
+                <div style="width:8px;height:3px;border-radius:2px;background:#C6DFF3"></div>
+              </div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2E6FA8">Locations</span>
+            </div>
+            <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#10263B;margin:12px 0 8px;line-height:1.1">Find your machine.</h2>
+            <p style="color:#4A6076;font-size:17px;margin:0;max-width:540px;line-height:1.6">Every location below is pulled live from our machine directory &#8212; status, hours and all.</p>
+          </div>
+          <sc-if value="{{ locsReady }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;background:#E3F4EA;border-radius:999px;padding:9px 18px;font-size:13.5px;font-weight:600;color:#1F7A4D">
+              <span style="width:8px;height:8px;border-radius:50%;background:#2E9E6B;animation:qcPulse 2s infinite"></span>
+              {{ openCount }} live now
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:28px;align-items:start">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+            <sc-if value="{{ locsLoading }}" hint-placeholder-val="{{ true }}">
+              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite"></div>
+              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .2s"></div>
+              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .4s"></div>
+              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .6s"></div>
+            </sc-if>
+            <sc-if value="{{ snapshotMode }}" hint-placeholder-val="{{ false }}">
+              <div style="grid-column:1/-1;background:#FFF9EC;border:1px solid #F0E2C0;border-radius:14px;padding:13px 18px;font-size:13.5px;line-height:1.55;color:#7A6127;display:flex;gap:10px;align-items:flex-start">
+                <span style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:#D9A741;margin-top:5px"></span>
+                <span><strong>Snapshot data</strong> &#8212; the live directory can&#8217;t be reached from this preview (Sanity only allows approved domains; add the Netlify domain to the CORS allowlist at manage.sanity.io). Positions and details here are approximate; the deployed site shows the real CMS feed.</span>
+              </div>
+            </sc-if>
+            <sc-for list="{{ locs }}" as="l" hint-placeholder-count="0">
+              <div style="{{ l.wrapStyle }}">
+                <div style="height:190px;position:relative;background:#E9F1F8">
+                  <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ l.imgStyle }}"></div>
+                  </sc-if>
+                  <sc-if value="{{ l.noImg }}" hint-placeholder-val="{{ true }}">
+                    <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#93A7BA">STOREFRONT PHOTO</span>
+                  </sc-if>
+                  <span style="{{ l.badgeStyle }}">{{ l.badgeText }}</span>
+                </div>
+                <div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1">
+                  <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B;line-height:1.2">{{ l.name }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#5C7189;line-height:1.5">{{ l.addr }}</span>
+                  <sc-if value="{{ l.hasHours }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:3px;border-top:1px solid #EDF2F7;padding-top:10px;margin-top:2px">
+                      <sc-for list="{{ l.hours }}" as="h" hint-placeholder-count="0">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4A6076;line-height:1.5">{{ h }}</span>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6FA8">Directions &#8599;</a>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="position:sticky;top:98px;height:560px;border-radius:22px;overflow:hidden;border:1px solid #E1EAF2;box-shadow:0 20px 40px rgba(16,38,59,.1);position:relative;z-index:0;isolation:isolate">
+            <div id="qc-map" style="width:100%;height:100%;background:#EAF2F9"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:#0F2740;position:relative;overflow:hidden">
+      <span style="position:absolute;right:-40px;top:-90px;font-family:'Fredoka',sans-serif;font-size:380px;font-weight:600;color:rgba(255,255,255,.04);line-height:1;user-select:none">&#8383;</span>
+      <div style="max-width:1180px;margin:0 auto;padding:84px 28px;display:flex;align-items:center;gap:48px;flex-wrap:wrap;position:relative">
+        <div style="flex:1.4;min-width:420px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8FC1E8">The wire desk</span>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:40px;color:#FFFFFF;margin:12px 0 12px;line-height:1.12">Buying serious size? Skip the machine.</h2>
+          <p style="color:#B8CCDE;font-size:17px;line-height:1.65;margin:0;max-width:560px">Wire dollars from your bank and we send bitcoin straight to your wallet &#8212; at a rate agreed up front, the moment funds land. Built for five figures and up.</p>
+        </div>
+        <button onClick="{{ goWires }}" style="background:#FFFFFF;color:#10263B;border:none;border-radius:999px;padding:17px 32px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:17px;cursor:pointer;flex-shrink:0" style-hover="background:#DCEBF8">How wires work &#8594;</button>
+      </div>
+    </section>
+
+    <section id="faqs" style="background:#FFFFFF">
+      <div style="max-width:880px;margin:0 auto;padding:96px 28px">
+        <div style="display:flex;align-items:center;gap:10px;justify-content:center">
+          <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">
+            <div style="width:22px;height:3px;border-radius:2px;background:#4E9CD8"></div>
+            <div style="width:14px;height:3px;border-radius:2px;background:#8FC1E8"></div>
+            <div style="width:8px;height:3px;border-radius:2px;background:#C6DFF3"></div>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2E6FA8">FAQs</span>
+        </div>
+        <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#10263B;margin:12px 0 40px;line-height:1.1;text-align:center">Questions, answered.</h2>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ faqList }}" as="f" hint-placeholder-count="3">
+            <div style="border:1px solid #E1EAF2;border-radius:16px;background:#FBFDFE;overflow:hidden">
+              <div onClick="{{ f.toggle }}" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 22px;cursor:pointer" style-hover="background:#F4F8FB">
+                <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;color:#10263B">{{ f.q }}</span>
+                <span style="{{ f.chev }}">&#9662;</span>
+              </div>
+              <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 22px 20px;color:#4A6076;font-size:15.5px;line-height:1.65;max-width:720px">{{ f.ans }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="background:#0F2740">
+      <div style="max-width:1180px;margin:0 auto;padding:96px 28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:56px;align-items:start">
+        <div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8FC1E8">Contact</span>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 14px;line-height:1.1">Talk to a human.</h2>
+          <p style="color:#B8CCDE;font-size:17px;line-height:1.65;margin:0 0 36px;max-width:440px">Questions about a transaction, your first buy, or hosting a machine in your store &#8212; we answer.</p>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <a href="tel:12014195933" style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:28px;color:#FFFFFF" style-hover="color:#8FC1E8">201&#8209;419&#8209;5933</a>
+            <a href="mailto:team@quickiecoin.com" style="font-size:17px;color:#8FC1E8;font-weight:500" style-hover="color:#FFFFFF">team@quickiecoin.com</a>
+            <div style="display:flex;gap:18px;font-size:15px;font-weight:500">
+              <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#B8CCDE" style-hover="color:#FFFFFF">Instagram &#8599;</a>
+              <a href="https://twitter.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#B8CCDE" style-hover="color:#FFFFFF">Twitter &#8599;</a>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:10px;color:#B8CCDE;font-size:14.5px">
+              <span style="width:10px;height:10px;border-radius:50%;background:#2BDFC5;animation:qcPulse 2s infinite"></span>
+              Prefer chat? Tap the bubble in the corner &#8600;
+            </div>
+          </div>
+        </div>
+        <sc-if value="{{ contactNotSent }}" hint-placeholder-val="{{ true }}">
+          <form name="contact-form" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit="{{ submitContact }}" style="background:#FFFFFF;border-radius:22px;padding:34px;display:flex;flex-direction:column;gap:18px;box-shadow:0 28px 56px rgba(0,0,0,.28)">
+            <input type="hidden" name="form-name" value="contact-form">
+            <p style="display:none"><label>Don&#8217;t fill this out if you&#8217;re human: <input name="bot-field"></label></p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Name
+                <input name="name" type="text" required="required" placeholder="Satoshi Nakamoto" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Email
+                <input name="email" type="email" required="required" placeholder="satoshi@nakamoto.com" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+              </label>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Message
+              <textarea name="message" rows="5" required="required" placeholder="How can we help?" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical" style-focus="border-color:#4E9CD8"></textarea>
+            </label>
+            <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Send message</button>
+          </form>
+        </sc-if>
+        <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border-radius:22px;padding:48px 34px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 28px 56px rgba(0,0,0,.28)">
+            <div style="width:56px;height:56px;border-radius:50%;background:#E3F4EA;color:#1F7A4D;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;animation:qcPop .5s ease-out both">&#10003;</div>
+            <p style="font-family:'Fredoka',sans-serif;font-size:23px;font-weight:500;color:#10263B;margin:0">Got it &#8212; we&#8217;ll get back to you shortly.</p>
+            <p style="color:#4A6076;font-size:15px;margin:0">Usually same day. In a hurry? <a href="tel:12014195933" style="font-weight:600">Call us.</a></p>
+            <span onClick="{{ resetContact }}" style="color:#2E6FA8;font-weight:600;font-size:14px;cursor:pointer;margin-top:6px">Send another message</span>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isWires }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Wires" style="display:flex;flex-direction:column">
+    <section style="position:relative;overflow:hidden">
+      <div style="position:absolute;left:-160px;top:-160px;width:520px;height:520px;border-radius:50%;background:#DCEBF8;opacity:.55"></div>
+      <div style="max-width:880px;margin:0 auto;padding:92px 28px 72px;position:relative;text-align:center">
+        <div style="display:flex;align-items:center;gap:10px;justify-content:center">
+          <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">
+            <div style="width:22px;height:3px;border-radius:2px;background:#4E9CD8"></div>
+            <div style="width:14px;height:3px;border-radius:2px;background:#8FC1E8"></div>
+            <div style="width:8px;height:3px;border-radius:2px;background:#C6DFF3"></div>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2E6FA8">The wire desk</span>
+        </div>
+        <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:58px;line-height:1.06;margin:18px 0 18px;color:#10263B;text-wrap:pretty">Buy <span style="color:#4E9CD8">&#8383;</span> by bank wire.</h1>
+        <p style="font-size:19px;line-height:1.6;color:#4A6076;margin:0 auto 28px;max-width:600px;text-wrap:pretty">For purchases beyond machine limits &#8212; five figures and up. One&#8209;time approval, then it&#8217;s as fast as your bank.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;justify-content:center;font-size:13.5px;font-weight:500;color:#5C7189">
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#4E9CD8"></span>FinCEN&#8209;registered MSB</span>
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#4E9CD8"></span>Rate agreed before you send</span>
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:50%;background:#4E9CD8"></span>Bitcoin sent the moment funds land</span>
+        </div>
+      </div>
+    </section>
+    <section style="background:#F4F8FB;border-top:1px solid #E9F0F6">
+      <div style="max-width:1180px;margin:0 auto;padding:76px 28px 88px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+          <div style="background:#FFFFFF;border:1px solid #E1EAF2;border-radius:20px;padding:26px 24px;display:flex;flex-direction:column;gap:12px">
+            <span style="width:42px;height:42px;border-radius:13px;background:#DCEBF8;color:#2E6FA8;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px">1</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B">Get approved</span>
+            <span style="font-size:14.5px;line-height:1.6;color:#4A6076">Email us basic ID once. We&#8217;re a registered money services business, so KYC is quick but real.</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E1EAF2;border-radius:20px;padding:26px 24px;display:flex;flex-direction:column;gap:12px">
+            <span style="width:42px;height:42px;border-radius:13px;background:#DCEBF8;color:#2E6FA8;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px">2</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B">Lock the details</span>
+            <span style="font-size:14.5px;line-height:1.6;color:#4A6076">Send your receiving bitcoin address. We confirm the rate before you send a cent.</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E1EAF2;border-radius:20px;padding:26px 24px;display:flex;flex-direction:column;gap:12px">
+            <span style="width:42px;height:42px;border-radius:13px;background:#DCEBF8;color:#2E6FA8;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px">3</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B">Send the wire</span>
+            <span style="font-size:14.5px;line-height:1.6;color:#4A6076">From your own bank, any size. Domestic wires usually land the same day.</span>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E1EAF2;border-radius:20px;padding:26px 24px;display:flex;flex-direction:column;gap:12px">
+            <span style="width:42px;height:42px;border-radius:13px;background:#FFF4E3;color:#C77800;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">&#8383;</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B">Receive bitcoin</span>
+            <span style="font-size:14.5px;line-height:1.6;color:#4A6076">The moment funds hit our account, bitcoin goes to your address. Immediately &#8212; that&#8217;s the deal.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section style="background:#5599D6;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-140px;top:-160px;width:460px;height:460px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="max-width:1180px;margin:0 auto;padding:88px 28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:center;position:relative">
+        <div>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:42px;color:#FFFFFF;margin:0 0 14px;line-height:1.12">Start the conversation.</h2>
+          <p style="color:rgba(255,255,255,.88);font-size:17px;line-height:1.65;margin:0 0 26px;max-width:460px">Tell us who you are and roughly what you&#8217;re looking to buy. A real person replies with next steps &#8212; usually the same day.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,.92);font-size:15px;font-weight:500">
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Person&#8209;to&#8209;person &#8212; you deal with an owner, not a queue</span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Moving eight figures a year through this desk since 2018</span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
+          </div>
+        </div>
+        <sc-if value="{{ wireNotSent }}" hint-placeholder-val="{{ true }}">
+          <form name="wire-form" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit="{{ submitWire }}" style="background:#FFFFFF;border-radius:22px;padding:34px;display:flex;flex-direction:column;gap:18px;box-shadow:0 28px 56px rgba(9,38,66,.3)">
+            <input type="hidden" name="form-name" value="wire-form">
+            <p style="display:none"><label>Don&#8217;t fill this out if you&#8217;re human: <input name="bot-field"></label></p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Name
+                <input name="name" type="text" required="required" placeholder="Satoshi Nakamoto" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Email
+                <input name="email" type="email" required="required" placeholder="satoshi@nakamoto.com" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+              </label>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Approximate amount
+              <select name="amount" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;appearance:auto" style-focus="border-color:#4E9CD8">
+                <option>Under $10,000</option>
+                <option>$10,000 &#8211; $50,000</option>
+                <option>$50,000 &#8211; $250,000</option>
+                <option>$250,000+</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Anything else? <span style="font-weight:400;color:#93A7BA">(optional)</span>
+              <textarea name="note" rows="3" placeholder="Timing, questions, how you found us&#8230;" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical"></textarea>
+            </label>
+            <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Request wire details</button>
+            <span style="font-size:12.5px;color:#93A7BA;text-align:center">No obligation &#8212; this just starts an email thread with us.</span>
+          </form>
+        </sc-if>
+        <sc-if value="{{ wireSent }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border-radius:22px;padding:52px 34px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 28px 56px rgba(9,38,66,.3)">
+            <div style="width:56px;height:56px;border-radius:50%;background:#E3F4EA;color:#1F7A4D;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;animation:qcPop .5s ease-out both">&#10003;</div>
+            <p style="font-family:'Fredoka',sans-serif;font-size:23px;font-weight:500;color:#10263B;margin:0">We&#8217;ll be in touch.</p>
+            <p style="color:#4A6076;font-size:15px;margin:0;max-width:340px">Thanks for reaching out &#8212; expect an email about next steps, usually the same day.</p>
+            <span onClick="{{ resetWire }}" style="color:#2E6FA8;font-weight:600;font-size:14px;cursor:pointer;margin-top:6px">Submit another inquiry</span>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <footer style="background:#0B2036;margin-top:auto">
+    <div style="max-width:1180px;margin:0 auto;padding:40px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:24px;display:block;filter:brightness(0) invert(1);opacity:.9;align-self:flex-start">
+        <span style="color:#6E88A3;font-size:13px;max-width:480px;line-height:1.6">&#169; 2026 QuickieCoin NJ LLC &#183; A FinCEN&#8209;registered money services business. Buy bitcoin for cash at our machines across Hudson County, New Jersey.</span>
+      </div>
+      <div style="display:flex;gap:22px;font-size:14px;font-weight:500;flex-wrap:wrap">
+        <a href="#privacy" style="color:#9FB4C9" style-hover="color:#FFFFFF">Privacy</a>
+        <a href="#terms" style="color:#9FB4C9" style-hover="color:#FFFFFF">Terms</a>
+        <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#9FB4C9" style-hover="color:#FFFFFF">Instagram</a>
+        <a href="https://twitter.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#9FB4C9" style-hover="color:#FFFFFF">Twitter</a>
+        <a href="mailto:team@quickiecoin.com" style="color:#9FB4C9" style-hover="color:#FFFFFF">team@quickiecoin.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;right:24px;bottom:98px;width:288px;background:#FFFFFF;border-radius:18px;box-shadow:0 24px 56px rgba(16,38,59,.3);overflow:hidden;z-index:60">
+      <div style="background:#2BDFC5;padding:16px 18px;display:flex;align-items:center;gap:10px">
+        <span style="width:9px;height:9px;border-radius:50%;background:#0E2A47"></span>
+        <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;color:#0E2A47">QuickieCoin live chat</span>
+      </div>
+      <div style="padding:18px;display:flex;flex-direction:column;gap:10px">
+        <p style="margin:0;font-size:14px;line-height:1.6;color:#4A6076">You&#8217;re looking at the design preview. On the live site, your existing <strong>Smallchat</strong> widget mounts right here &#8212; same channel as today.</p>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#93A7BA;word-break:break-all">embed.small.chat/TBRGBNPL0GCCGPR9KK.js</span>
+      </div>
+    </div>
+  </sc-if>
+  <div onClick="{{ toggleChat }}" style="position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;background:#4E9CD8;box-shadow:0 14px 32px rgba(16,38,59,.35);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;transition:transform .2s" style-hover="transform:scale(1.07)">
+    <div style="width:26px;height:20px;background:#FFFFFF;border-radius:7px;position:relative">
+      <div style="position:absolute;left:5px;bottom:-6px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #FFFFFF"></div>
+      <div style="position:absolute;left:6px;top:8px;width:14px;height:3px;border-radius:2px;background:#4E9CD8"></div>
+      <div style="position:absolute;left:6px;top:4px;width:9px;height:3px;border-radius:2px;background:#8FC1E8"></div>
+    </div>
+  </div>
+</div>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#4E9CD8"/><circle cx="50" cy="50" r="21" fill="#FFFFFF"/><text x="50" y="59" text-anchor="middle" font-family="sans-serif" font-size="26" font-weight="700" fill="#F7931A">&#8383;</text></svg></template></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showBtcPrice&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Header &amp; hero&quot;},
+  &quot;autoPlayDemo&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;How it works&quot;},
+  &quot;hideClosedLocations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Locations&quot;},
+  &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
+}">
+class Component extends DCLogic {
+  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, openFaq: 0, chatOpen: false };
+
+  static SNAPSHOT = [
+    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7699, long: -74.025, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
+    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029', lat: 40.7405, long: -74.1553, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400' },
+    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7523, long: -74.053, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400' },
+    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.7484, long: -74.0492, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400' },
+    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.7118, long: -74.087, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400' },
+    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7345, long: -74.0665, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400' },
+    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002', lat: 40.6748, long: -74.1069, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400' }
+  ];
+
+  componentDidMount() {
+    const q = encodeURIComponent('{"machines": *[_type == "machine"], "faqs": *[_type == "faqs"]}');
+    fetch('https://dkkl7znc.apicdn.sanity.io/v2021-10-21/data/query/production?query=' + q)
+      .then(r => r.json())
+      .then(d => { const res = (d && d.result) || {}; this.setState({ locations: res.machines || [], faqs: res.faqs || [] }); })
+      .catch(() => this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }));
+    fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+      .then(r => r.json())
+      .then(d => { const n = parseFloat(d && d.data && d.data.amount); if (n) this.setState({ price: '$' + Math.round(n).toLocaleString('en-US') }); })
+      .catch(() => {});
+    this._stepTimer = setInterval(() => {
+      if (this.props.autoPlayDemo ?? true) this.setState(s => ({ step: (s.step + 1) % 3 }));
+    }, 3800);
+    this._mapTimer = setInterval(() => this.ensureMap(), 450);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._stepTimer); clearInterval(this._mapTimer);
+    if (this._map) { try { this._map.remove(); } catch (e) {} }
+  }
+
+  ensureMap() {
+    const el = document.getElementById('qc-map');
+    if (!el) { if (this._map) { try { this._map.remove(); } catch (e) {} this._map = null; this._mapEl = null; } return; }
+    if (!window.L || !(this.state.locations || []).length) return;
+    const style = this.props.mapStyle ?? 'Clean light';
+    if (this._map && this._mapEl === el && !el.querySelector('.leaflet-tile-pane')) { try { this._map.remove(); } catch (e) {} this._map = null; }
+    if (this._map && this._mapEl === el) {
+      if (this._tileStyle !== style) {
+        this._map.removeLayer(this._tiles);
+        const t = this.tileFor(style);
+        this._tiles = window.L.tileLayer(t[0], { attribution: t[1], maxZoom: t[2] }).addTo(this._map);
+        this._tileStyle = style;
+      }
+      return;
+    }
+    if (this._map) { try { this._map.remove(); } catch (e) {} this._map = null; }
+    if (el._leaflet_id) { el.innerHTML = ''; try { delete el._leaflet_id; } catch (e) { el._leaflet_id = undefined; } el.className = ''; }
+    const pts = this.state.locations.filter(l => typeof l.lat === 'number' && typeof l.long === 'number');
+    let m;
+    try { m = window.L.map(el, { scrollWheelZoom: false }); } catch (e) { return; }
+    const t = this.tileFor(style);
+    this._tiles = window.L.tileLayer(t[0], { attribution: t[1], maxZoom: t[2] }).addTo(m);
+    this._tileStyle = style;
+    const icon = window.L.divIcon({
+      className: '',
+      html: '<div style="position:relative;width:40px;height:50px;filter:drop-shadow(0 3px 6px rgba(16,38,59,.4))">'
+        + '<div style="position:absolute;left:50%;margin-left:-8px;top:34px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:14px solid #FFFFFF"></div>'
+        + '<div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><img src="assets/images/qpin.png" style="width:30px;height:30px;object-fit:contain;display:block"></div>'
+        + '</div>',
+      iconSize: [40, 50], iconAnchor: [20, 50], popupAnchor: [0, -46]
+    });
+    const bounds = [];
+    pts.forEach(l => {
+      window.L.marker([l.lat, l.long], { icon }).addTo(m)
+        .bindPopup('<b style="font-family:Outfit,sans-serif">' + (l.location || l.name || '') + '</b><br><span style="font-family:Outfit,sans-serif">' + (l.address || '') + '</span>');
+      bounds.push([l.lat, l.long]);
+    });
+    if (bounds.length) m.fitBounds(bounds, { padding: [40, 40] }); else m.setView([40.72, -74.06], 12);
+    this._map = m; this._mapEl = el;
+  }
+
+  go(page) { this.setState({ page }); window.scrollTo({ top: 0 }); }
+
+  goSection(id) {
+    const scroll = () => { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 78, behavior: 'smooth' }); };
+    if (this.state.page !== 'home') { this.setState({ page: 'home' }); setTimeout(scroll, 140); } else scroll();
+  }
+
+  tileFor(style) {
+    const esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
+    const attr = 'Esri, HERE, Garmin, &copy; OpenStreetMap contributors';
+    if (style === 'Detailed streets') return [esri + 'World_Street_Map/MapServer/tile/{z}/{y}/{x}', attr, 18];
+    if (style === 'Dark') return [esri + 'Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', attr, 16];
+    return [esri + 'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', attr, 16];
+  }
+
+  imgUrl(t) {
+    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max'; }
+    catch (e) { return null; }
+  }
+
+  md(txt) {
+    const R = React, out = [];
+    String(txt || '').split(/\n{2,}/).forEach((p, i) => {
+      const parts = []; let rest = p, m, k = 0;
+      const rx = /\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)]+)\)/;
+      while ((m = rx.exec(rest))) {
+        if (m.index > 0) parts.push(rest.slice(0, m.index));
+        if (m[1] !== undefined) parts.push(R.createElement('strong', { key: k++ }, m[1]));
+        else parts.push(R.createElement('a', { key: k++, href: m[3], target: '_blank', rel: 'noreferrer' }, m[2]));
+        rest = rest.slice(m.index + m[0].length);
+      }
+      parts.push(rest);
+      out.push(R.createElement('p', { key: i, style: { margin: '0 0 10px' } }, parts));
+    });
+    return out;
+  }
+
+  renderVals() {
+    const st = this.state, self = this;
+    const showPrice = (this.props.showBtcPrice ?? true) && !!st.price;
+    const dotBase = { height: '8px', borderRadius: '5px', cursor: 'pointer', transition: 'all .3s ease', display: 'inline-block' };
+    const dot = on => ({ ...dotBase, width: on ? '26px' : '8px', background: on ? '#FFFFFF' : 'rgba(255,255,255,.45)' });
+    const cardBase = { display: 'flex', gap: '18px', padding: '22px 24px', borderRadius: '18px', cursor: 'pointer', transition: 'all .25s ease', alignItems: 'flex-start' };
+    const card = on => on
+      ? { ...cardBase, background: '#FFFFFF', color: '#10263B', boxShadow: '0 18px 36px rgba(9,38,66,.25)', transform: 'translateX(8px)' }
+      : { ...cardBase, background: 'rgba(255,255,255,.12)', color: '#FFFFFF' };
+    const numBase = { width: '40px', height: '40px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Fredoka',sans-serif", fontWeight: 600, fontSize: '15px', flexShrink: 0 };
+    const num = on => on ? { ...numBase, background: '#DCEBF8', color: '#2E6FA8' } : { ...numBase, background: 'rgba(255,255,255,.16)', color: '#FFFFFF' };
+
+    const raw = st.locations || [];
+    const hideClosed = this.props.hideClosedLocations ?? false;
+    const badgeBase = { position: 'absolute', top: '12px', left: '12px', borderRadius: '999px', padding: '5px 12px', fontSize: '12px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' };
+    const locs = raw
+      .filter(l => !hideClosed || l.open)
+      .sort((a, b) => (b.open === true) - (a.open === true) || String(a.location || '').localeCompare(String(b.location || '')))
+      .map(l => {
+        const img = l.thumbUrl || (l.thumb ? this.imgUrl(l.thumb) : null);
+        const hours = (l.hours || []).map(h => String(h).trim()).filter(Boolean);
+        return {
+          key: l._id, name: l.location || l.name || 'QuickieCoin machine', addr: l.address || '',
+          hasImg: !!img, noImg: !img,
+          imgStyle: img ? { position: 'absolute', inset: '10px', backgroundImage: 'url(' + img + ')', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : null,
+          hours: hours, hasHours: hours.length > 0,
+          dir: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((l.location || '') + ' ' + (l.address || '')),
+          wrapStyle: { background: '#FFFFFF', border: '1px solid #E1EAF2', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: l.open ? 1 : 0.55, boxShadow: '0 10px 24px rgba(16,38,59,.06)' },
+          badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#6B7B8C' },
+          badgeText: l.open ? '● Live' : 'Offline'
+        };
+      });
+
+    const fallbackFaqs = [
+      { question: 'Do I need an account?', answer: 'No account with us — ever. All you need is a bitcoin wallet app on your phone (any one you like) and cash.' },
+      { question: 'What do I need to bring?', answer: 'Cash and your phone. Verification starts with just a phone number at the machine; ID only comes into play at higher amounts.' },
+      { question: 'How fast do I get my bitcoin?', answer: 'It is sent the moment you confirm on the machine — you will usually see it arrive in your wallet before you are out the door.' },
+      { question: 'Can I sell bitcoin for cash?', answer: 'Yes — cash-out is available at our Teamwork Wireless machine in Bayonne. Call ahead for larger amounts and we will make sure the cash is there.' },
+      { question: 'What are the limits?', answer: 'Higher than you might expect — limits depend on your verification level, and the machines comfortably handle larger buys. Moving serious size? Our **wire desk** handles that — same people, better rate.' }
+    ];
+    const cmsItems = [];
+    (st.faqs || []).forEach(doc => (doc.faqItems || []).forEach(it => cmsItems.push(it)));
+    const items = cmsItems.length ? cmsItems : fallbackFaqs;
+    const chevBase = { color: '#8FA5BB', fontSize: '15px', transition: 'transform .25s ease', flexShrink: 0 };
+    const faqList = items.map((it, i) => ({
+      key: 'f' + i, q: it.question || '', ans: self.md(it.answer),
+      open: st.openFaq === i,
+      toggle: () => self.setState(s => ({ openFaq: s.openFaq === i ? -1 : i })),
+      chev: st.openFaq === i ? { ...chevBase, transform: 'rotate(180deg)', color: '#2E6FA8' } : chevBase
+    }));
+
+    return {
+      isHome: st.page === 'home', isWires: st.page === 'wires',
+      goHome: () => this.go('home'), goWires: () => this.go('wires'),
+      goHow: () => this.goSection('how'), goLocs: () => this.goSection('locations'),
+      goFaqs: () => this.goSection('faqs'), goContact: () => this.goSection('contact'),
+      navWiresStyle: { cursor: 'pointer', padding: '6px 2px', color: st.page === 'wires' ? '#2E6FA8' : 'inherit', fontWeight: st.page === 'wires' ? 600 : 500 },
+      price: st.price, showPrice: showPrice,
+      s0: st.step === 0, s1: st.step === 1, s2: st.step === 2,
+      stepCaption: ['SCANNING WALLET…', 'COUNTING CASH…', 'BITCOIN SENT ✓'][st.step],
+      goStep0: () => this.setState({ step: 0 }), goStep1: () => this.setState({ step: 1 }), goStep2: () => this.setState({ step: 2 }),
+      dot0: dot(st.step === 0), dot1: dot(st.step === 1), dot2: dot(st.step === 2),
+      card0: card(st.step === 0), card1: card(st.step === 1), card2: card(st.step === 2),
+      num0: num(st.step === 0), num1: num(st.step === 1), num2: num(st.step === 2),
+      locs: locs, locsReady: Array.isArray(st.locations) && locs.length > 0,
+      locsLoading: st.locations === null, snapshotMode: st.snapshotMode,
+      openCount: raw.filter(l => l.open).length,
+      faqList: faqList,
+      contactSent: st.contactSent, contactNotSent: !st.contactSent,
+      submitContact: e => { e.preventDefault(); this.setState({ contactSent: true }); },
+      resetContact: () => this.setState({ contactSent: false }),
+      wireSent: st.wireSent, wireNotSent: !st.wireSent,
+      submitWire: e => { e.preventDefault(); this.setState({ wireSent: true }); },
+      resetWire: () => this.setState({ wireSent: false }),
+      chatOpen: st.chatOpen, toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen }))
+    };
+  }
+}
+</script>
+</body>
+</html>
