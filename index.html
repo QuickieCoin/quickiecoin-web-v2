@@ -288,6 +288,9 @@ a:hover{color:#10263B}
                     <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#93A7BA">STOREFRONT PHOTO</span>
                   </sc-if>
                   <span style="{{ l.badgeStyle }}">{{ l.badgeText }}</span>
+                  <sc-if value="{{ l.sellsToo }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute;top:12px;right:12px;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;background:#FFF4E3;color:#C77800">&#8646; Buy &amp; sell</span>
+                  </sc-if>
                 </div>
                 <div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1">
                   <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:19px;color:#10263B;line-height:1.2">{{ l.name }}</span>
@@ -455,8 +458,6 @@ a:hover{color:#10263B}
           <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:42px;color:#FFFFFF;margin:0 0 14px;line-height:1.12">Start the conversation.</h2>
           <p style="color:rgba(255,255,255,.88);font-size:17px;line-height:1.65;margin:0 0 26px;max-width:460px">Tell us who you are and roughly what you&#8217;re looking to buy. A real person replies with next steps &#8212; usually the same day.</p>
           <div style="display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,.92);font-size:15px;font-weight:500">
-            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Person&#8209;to&#8209;person &#8212; you deal with an owner, not a queue</span>
-            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Moving eight figures a year through this desk since 2018</span>
             <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
           </div>
         </div>
@@ -677,7 +678,8 @@ class Component extends DCLogic {
           dir: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((l.location || '') + ' ' + (l.address || '')),
           wrapStyle: { background: '#FFFFFF', border: '1px solid #E1EAF2', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: l.open ? 1 : 0.55, boxShadow: '0 10px 24px rgba(16,38,59,.06)' },
           badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#6B7B8C' },
-          badgeText: l.open ? '● Live' : 'Offline'
+          badgeText: l.open ? '● Live' : 'Offline',
+          sellsToo: /bayonne/i.test(l.address || '')
         };
       });
 
