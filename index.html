@@ -605,6 +605,15 @@ class Component extends DCLogic {
     this._map = m; this._mapEl = el;
   }
 
+  submitNetlifyForm(e, sentKey) {
+    e.preventDefault();
+    const form = e.target;
+    const body = new URLSearchParams(new FormData(form)).toString();
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
+      .then(() => { form.reset(); this.setState({ [sentKey]: true }); })
+      .catch(() => this.setState({ [sentKey]: true }));
+  }
+
   go(page) { this.setState({ page }); window.scrollTo({ top: 0 }); }
 
   goSection(id) {
@@ -711,10 +720,10 @@ class Component extends DCLogic {
       openCount: raw.filter(l => l.open).length,
       faqList: faqList,
       contactSent: st.contactSent, contactNotSent: !st.contactSent,
-      submitContact: e => { e.preventDefault(); this.setState({ contactSent: true }); },
+      submitContact: e => this.submitNetlifyForm(e, 'contactSent'),
       resetContact: () => this.setState({ contactSent: false }),
       wireSent: st.wireSent, wireNotSent: !st.wireSent,
-      submitWire: e => { e.preventDefault(); this.setState({ wireSent: true }); },
+      submitWire: e => this.submitNetlifyForm(e, 'wireSent'),
       resetWire: () => this.setState({ wireSent: false }),
       chatOpen: st.chatOpen, toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen }))
     };
