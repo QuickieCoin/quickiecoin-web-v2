@@ -42,6 +42,61 @@ a:hover{color:#10263B}
 @keyframes qcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes qcSkel{0%,100%{opacity:.45}50%{opacity:.9}}
 @keyframes qcDash{0%{transform:translateX(-6px);opacity:0}30%{opacity:1}100%{transform:translateX(54px);opacity:0}}
+
+/* ============================================================
+   Responsive / mobile layer (added 2026-09).
+   The page is built from fixed desktop widths with inline styles;
+   these media-query rules override those inline styles by matching
+   their substrings, so no per-element markup change is needed.
+   ============================================================ */
+@media (max-width:820px){
+  /* Flex columns stop forcing a wider-than-screen minimum */
+  [style*="min-width:420px"],[style*="min-width:380px"]{min-width:100%!important}
+  /* Two-column layouts collapse to one */
+  [style*="grid-template-columns:minmax(0,7fr) minmax(0,5fr)"],
+  [style*="grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)"],
+  [style*="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)"]{grid-template-columns:1fr!important;gap:32px!important}
+  /* The four wire-desk steps: 4 across -> 2 across */
+  [style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr!important}
+  /* Trim the tall section padding so mobile isn't mostly whitespace */
+  [style*="padding:84px 28px 96px"]{padding:44px 20px 52px!important}
+  [style*="padding:96px 28px"]{padding:56px 20px!important}
+  [style*="padding:92px 28px 72px"]{padding:52px 20px 44px!important}
+  [style*="padding:76px 28px 88px"]{padding:48px 20px 56px!important}
+  [style*="padding:88px 28px"]{padding:52px 20px!important}
+  [style*="padding:84px 28px"]{padding:48px 20px!important}
+  /* Headings scale down */
+  [style*="font-size:64px"]{font-size:40px!important}
+  [style*="font-size:58px"]{font-size:38px!important}
+  [style*="font-size:44px"]{font-size:31px!important}
+  [style*="font-size:42px"]{font-size:30px!important}
+  [style*="font-size:40px"]{font-size:29px!important}
+  /* Step caption above the pager dots: don't reserve a fixed 150px */
+  [style*="min-width:150px"]{min-width:0!important;text-align:center!important}
+  /* Giant decorative ₿ watermark shouldn't spill the layout */
+  [style*="font-size:380px"]{font-size:200px!important}
+
+  /* --- Navigation: let it wrap, links drop to a centered second row --- */
+  nav [style*="height:74px"]{height:auto!important;flex-wrap:wrap!important;row-gap:0!important;padding-top:12px!important;padding-bottom:12px!important}
+  nav [style*="gap:22px;flex:1"]{order:3!important;flex-basis:100%!important;justify-content:center!important;flex-wrap:wrap!important;gap:6px 18px!important;margin-top:10px!important;font-size:14px!important}
+  /* Live-price pill is redundant with the hero card on small screens */
+  nav [style*="background:#FFF4E3;border:1px solid #F5DDB4"]{display:none!important}
+  /* Phone button hugs the right, logo the left */
+  nav [style*="gap:28px"]{gap:12px!important;justify-content:space-between!important}
+}
+@media (max-width:520px){
+  /* Stack the remaining paired grids (location cards, contact info, form name/email) */
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  /* Wire-desk steps go single-column on the narrowest screens */
+  [style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr!important}
+  [style*="font-size:64px"]{font-size:34px!important}
+  [style*="font-size:58px"]{font-size:33px!important}
+  [style*="font-size:44px"]{font-size:27px!important}
+  [style*="font-size:42px"]{font-size:26px!important}
+  [style*="font-size:40px"]{font-size:26px!important}
+  /* Hero / body copy a touch smaller */
+  [style*="font-size:19px"]{font-size:17px!important}
+}
 </style>
 </helmet>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#4E9CD8"/><circle cx="60" cy="60" r="26" fill="#FFFFFF"/><text x="60" y="71" font-family="sans-serif" font-size="32" font-weight="700" fill="#F7931A" text-anchor="middle">&#8383;</text></svg></template>
