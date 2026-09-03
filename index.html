@@ -502,25 +502,7 @@ a:hover{color:#10263B}
     </div>
   </footer>
 
-  <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;right:24px;bottom:98px;width:288px;background:#FFFFFF;border-radius:18px;box-shadow:0 24px 56px rgba(16,38,59,.3);overflow:hidden;z-index:60">
-      <div style="background:#2BDFC5;padding:16px 18px;display:flex;align-items:center;gap:10px">
-        <span style="width:9px;height:9px;border-radius:50%;background:#0E2A47"></span>
-        <span style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;color:#0E2A47">QuickieCoin live chat</span>
-      </div>
-      <div style="padding:18px;display:flex;flex-direction:column;gap:10px">
-        <p style="margin:0;font-size:14px;line-height:1.6;color:#4A6076">You&#8217;re looking at the design preview. On the live site, your existing <strong>Smallchat</strong> widget mounts right here &#8212; same channel as today.</p>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#93A7BA;word-break:break-all">embed.small.chat/TBRGBNPL0GCCGPR9KK.js</span>
-      </div>
-    </div>
-  </sc-if>
-  <div onClick="{{ toggleChat }}" style="position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;background:#4E9CD8;box-shadow:0 14px 32px rgba(16,38,59,.35);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;transition:transform .2s" style-hover="transform:scale(1.07)">
-    <div style="width:26px;height:20px;background:#FFFFFF;border-radius:7px;position:relative">
-      <div style="position:absolute;left:5px;bottom:-6px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #FFFFFF"></div>
-      <div style="position:absolute;left:6px;top:8px;width:14px;height:3px;border-radius:2px;background:#4E9CD8"></div>
-      <div style="position:absolute;left:6px;top:4px;width:9px;height:3px;border-radius:2px;background:#8FC1E8"></div>
-    </div>
-  </div>
+  <script src="https://embed.small.chat/TBRGBNPL0GCCGPR9KK.js"></script>
 </div>
 
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#4E9CD8"/><circle cx="50" cy="50" r="21" fill="#FFFFFF"/><text x="50" y="59" text-anchor="middle" font-family="sans-serif" font-size="26" font-weight="700" fill="#F7931A">&#8383;</text></svg></template></x-dc>
@@ -531,7 +513,7 @@ a:hover{color:#10263B}
   &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
 }">
 class Component extends DCLogic {
-  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, openFaq: 0, chatOpen: false };
+  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, openFaq: 0 };
 
   static SNAPSHOT = [
     { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7699, long: -74.025, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
@@ -724,8 +706,7 @@ class Component extends DCLogic {
       resetContact: () => this.setState({ contactSent: false }),
       wireSent: st.wireSent, wireNotSent: !st.wireSent,
       submitWire: e => this.submitNetlifyForm(e, 'wireSent'),
-      resetWire: () => this.setState({ wireSent: false }),
-      chatOpen: st.chatOpen, toggleChat: () => this.setState(s => ({ chatOpen: !s.chatOpen }))
+      resetWire: () => this.setState({ wireSent: false })
     };
   }
 }
