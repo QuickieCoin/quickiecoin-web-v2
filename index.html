@@ -694,6 +694,10 @@ class Component extends DCLogic {
   ];
 
   componentDidMount() {
+    // The static pages (/hosting/, /privacy/, /terms/) and the /wires legacy
+    // redirect link to /#wires, which has no route of its own — honour the
+    // hash on load so those links land on the wire desk, not the top of home.
+    if (typeof location !== 'undefined' && location.hash === '#wires') this.state.page = 'wires';
     const q = encodeURIComponent('{"machines": *[_type == "machine"], "faqs": *[_type == "faqs"]}');
     fetch('https://dkkl7znc.apicdn.sanity.io/v2021-10-21/data/query/production?query=' + q)
       .then(r => r.json())

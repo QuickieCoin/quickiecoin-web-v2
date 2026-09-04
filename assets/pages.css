@@ -61,16 +61,60 @@ a:hover { color: var(--ink); }
   z-index: 50;
 }
 .hdr-in {
-  max-width: 880px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 28px;
   height: 74px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 28px;
 }
-.hdr-in img { height: 30px; display: block; }
+/* width:auto keeps the 500x56 wordmark's aspect ratio; the width/height
+   attributes on the tag are there to reserve space, not to reshape it. */
+.hdr-in img { height: 30px; width: auto; display: block; }
+.hdr-logo { flex-shrink: 0; display: flex; align-items: center; }
+
+.hdr-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+}
+.hdr-nav a { color: #3D5570; padding: 6px 2px; }
+.hdr-nav a:hover { color: var(--accent-dark); }
+/* Live BTC price pill. Values mirror index.html's .qc-navprice exactly.
+   Hidden until the Coinbase fetch resolves, so no-JS and fetch failures both
+   just render the header without it — same behaviour as sc-if showPrice. */
+.hdr-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFF4E3;
+  border: 1px solid #F5DDB4;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9A5B00;
+  flex-shrink: 0;
+}
+.hdr-price-b {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F7931A;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .hdr-tel {
   background: var(--accent-pale);
   color: var(--accent-dark);
@@ -192,6 +236,7 @@ strong { color: var(--ink); }
 }
 .ftr-in img {
   height: 24px;
+  width: auto;
   display: block;
   filter: brightness(0) invert(1);
   opacity: .9;
@@ -217,9 +262,31 @@ strong { color: var(--ink); }
 body { display: flex; flex-direction: column; min-height: 100vh; }
 main { flex: 1 0 auto; width: 100%; }
 
+/* Same shape as index.html's mobile nav: logo and phone on row one, links
+   centred on row two. */
+@media (max-width: 820px) {
+  .hdr-in {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .hdr-nav {
+    order: 3;
+    flex: 1 1 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 6px;
+  }
+  .hdr-logo { flex: 1; }
+  .hdr-price { display: none; }
+}
+
 @media (max-width: 560px) {
   main { padding: 40px 20px 64px; }
-  .hdr-in { padding: 0 20px; }
+  .hdr-in { padding: 12px 20px; }
   .card { padding: 22px 20px; }
 }
 
