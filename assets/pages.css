@@ -84,6 +84,37 @@ a:hover { color: var(--ink); }
 }
 .hdr-nav a { color: #3D5570; padding: 6px 2px; }
 .hdr-nav a:hover { color: var(--accent-dark); }
+/* Live BTC price pill. Values mirror index.html's .qc-navprice exactly.
+   Hidden until the Coinbase fetch resolves, so no-JS and fetch failures both
+   just render the header without it — same behaviour as sc-if showPrice. */
+.hdr-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFF4E3;
+  border: 1px solid #F5DDB4;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9A5B00;
+  flex-shrink: 0;
+}
+.hdr-price-b {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F7931A;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .hdr-tel {
   background: var(--accent-pale);
   color: var(--accent-dark);
@@ -250,6 +281,7 @@ main { flex: 1 0 auto; width: 100%; }
     margin-top: 6px;
   }
   .hdr-logo { flex: 1; }
+  .hdr-price { display: none; }
 }
 
 @media (max-width: 560px) {

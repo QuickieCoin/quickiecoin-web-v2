@@ -7,6 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 <meta name="theme-color" content="#F4F8FB">
+<link rel="preconnect" href="https://api.coinbase.com" crossorigin="anonymous">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Outfit:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@600&amp;display=swap">
@@ -24,6 +25,9 @@
       <a href="/#faqs">FAQs</a>
       <a href="/#wires">Wires</a>
     </nav>
+    <div class="hdr-price" id="qc-price" hidden>
+      <span class="hdr-price-b">&#8383;</span><span id="qc-price-val"></span>
+    </div>
     <a class="hdr-tel" href="tel:+12014195933">201&#8209;419&#8209;5933</a>
   </div>
 </header>
@@ -63,5 +67,19 @@
     </nav>
   </div>
 </footer>
+<script>
+(function () {
+  fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var n = parseFloat(d && d.data && d.data.amount);
+      if (!n) return;
+      document.getElementById('qc-price-val').textContent =
+        '$' + Math.round(n).toLocaleString('en-US');
+      document.getElementById('qc-price').hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>
