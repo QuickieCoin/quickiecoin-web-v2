@@ -32,14 +32,16 @@
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Content-hashed CSS lives in its own directory: Netlify's _headers matches a
-# trailing splat, not a wildcard inside a filename, so /assets/pages.*.css
-# silently never matched and the file fell through to the /assets/* rule.
-/assets/css/*
-  Cache-Control: public, max-age=31536000, immutable
-
 /assets/*
   Cache-Control: public, max-age=86400
+
+# Content-hashed CSS, in its own directory for two reasons: Netlify's _headers
+# matches a trailing splat and not a wildcard inside a filename (so an earlier
+# /assets/pages.*.css rule silently never matched), and where two rules both
+# match a path the LATER one wins — so this must sit after /assets/* to
+# override it. Both were verified against production rather than assumed.
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /static/*
   Cache-Control: public, max-age=86400
