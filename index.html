@@ -3,6 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HLE7B2H2NW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HLE7B2H2NW');
+  // Enhanced measurement counts outbound clicks to other sites, but not tel: links.
+  // The phone number is the primary conversion here, so it is tracked explicitly.
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    var a = t && t.closest ? t.closest('a[href^="tel:"]') : null;
+    if (a) { gtag('event', 'phone_click', { link_url: a.getAttribute('href') }); }
+  });
+</script>
 <title>QuickieCoin</title>
 <meta name="description" content="The easiest way to buy Bitcoin in Hudson County, NJ. Walk up with cash, walk out with bitcoin — no account, no bank, no waiting.">
 <link rel="canonical" href="https://quickiecoin.com/">

@@ -3,6 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HLE7B2H2NW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HLE7B2H2NW');
+  // Enhanced measurement counts outbound clicks to other sites, but not tel: links.
+  // The phone number is the primary conversion here, so it is tracked explicitly.
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    var a = t && t.closest ? t.closest('a[href^="tel:"]') : null;
+    if (a) { gtag('event', 'phone_click', { link_url: a.getAttribute('href') }); }
+  });
+</script>
 <title>Privacy Policy | QuickieCoin</title>
 <meta name="description" content="How QuickieCoin NJ LLC collects, uses and retains your information, including the records we are required to keep and report as a registered money services business.">
 <link rel="canonical" href="https://quickiecoin.com/privacy/">
@@ -37,7 +52,7 @@
 <main id="content">
   <p class="eyebrow">Legal</p>
   <h1>Privacy Policy</h1>
-  <p class="meta">Effective 3 September 2026 &#183; QuickieCoin NJ LLC</p>
+  <p class="meta">Effective 4 September 2026 &#183; QuickieCoin NJ LLC</p>
 
   <p>This policy describes what QuickieCoin NJ LLC (&#8220;QuickieCoin&#8221;, &#8220;we&#8221;, &#8220;us&#8221;) collects when you use this website, what we do with it, and how long we keep it. It covers <strong>quickiecoin.com</strong>. Information collected at one of our bitcoin machines is governed by the notices and terms presented on the machine itself and by our obligations as a registered money services business, described below.</p>
 
@@ -52,7 +67,8 @@
   </ul>
   <p>Both forms are processed by <strong>Netlify</strong>, which hosts this site. Submissions are stored in our Netlify account and emailed to us. Netlify also records standard server request data — IP address, user agent, the pages requested and when — as part of serving and protecting the site.</p>
   <p>We also run <strong>Smallchat</strong>, the chat bubble in the corner. If you open it and send a message, Smallchat receives that message and whatever contact details you choose to type into it, and relays them to us. If you do not open it, it does not collect a conversation.</p>
-  <p>This site does not run analytics, advertising or tracking pixels, and does not set cookies of its own for those purposes. Third parties listed below may set their own cookies or storage; see their policies.</p>
+  <p>This site runs <strong>Google Analytics 4</strong> to count visits and see which pages and links people use. It sets Google's cookies in your browser and sends Google your IP address, the pages you view, and basic device and referral information. We read it only in aggregate. We have not enabled Google Signals or advertising personalisation, we have turned off sharing this data with Google for its own product, benchmarking or marketing purposes, and event data is deleted after 14 months. You can opt out across every site with Google's <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noreferrer">opt-out browser add-on</a>, or by blocking cookies for this site — nothing on the site depends on them.</p>
+  <p>This site runs no advertising and no advertising pixels. Third parties listed below may set their own cookies or storage; see their policies.</p>
 
   <h2>Third parties your browser contacts</h2>
   <p>Loading this site causes your browser to make requests to the following services. Each of them necessarily sees your IP address and basic request information:</p>
@@ -62,6 +78,7 @@
     <li><strong>Coinbase</strong> — queried for the displayed bitcoin price. We send no information about you.</li>
     <li><strong>Esri / ArcGIS</strong> — map tiles for the locations map.</li>
     <li><strong>Google Fonts</strong> — the typefaces used on the site.</li>
+    <li><strong>Google Analytics</strong> — visit measurement, described above.</li>
     <li><strong>Smallchat</strong> — the chat widget.</li>
   </ul>
   <p>We do not control these services and this policy does not govern them.</p>

@@ -1,3 +1,14 @@
+# The Netlify subdomain serves the same build as the apex, and Netlify does NOT
+# redirect it to the primary custom domain automatically — verified 2026-09-04,
+# it returned 200. Without this rule quickiecoin.netlify.app is a byte-identical
+# duplicate of quickiecoin.com. Kept first so a legacy path arriving on the
+# subdomain reaches the apex in one hop rather than two.
+#
+# The `from` must be host-qualified: a path-only rule would match the apex too
+# and redirect the site to itself.
+
+https://quickiecoin.netlify.app/*   https://quickiecoin.com/:splat   301!
+
 # Legacy paths from the v1 Nuxt site, which Google still has indexed and which
 # return a Netlify 404 today. Each path below was confirmed to return 200 on
 # https://quickiecoin.netlify.app before being listed here.
