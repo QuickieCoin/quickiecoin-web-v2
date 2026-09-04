@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -120,7 +120,7 @@ a:hover{color:#10263B}
           <span>{{ price }}</span>
         </div>
       </sc-if>
-      <a href="tel:12014195933" style="background:#DCEBF8;color:#2E6FA8;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;flex-shrink:0" style-hover="background:#4E9CD8;color:#FFFFFF">201&#8209;419&#8209;5933</a>
+      <a href="tel:+12014195933" style="background:#DCEBF8;color:#2E6FA8;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;flex-shrink:0" style-hover="background:#4E9CD8;color:#FFFFFF">201&#8209;419&#8209;5933</a>
     </div>
   </nav>
 
@@ -332,7 +332,7 @@ a:hover{color:#10263B}
             <sc-if value="{{ snapshotMode }}" hint-placeholder-val="{{ false }}">
               <div style="grid-column:1/-1;background:#FFF9EC;border:1px solid #F0E2C0;border-radius:14px;padding:13px 18px;font-size:13.5px;line-height:1.55;color:#7A6127;display:flex;gap:10px;align-items:flex-start">
                 <span style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:#D9A741;margin-top:5px"></span>
-                <span><strong>Snapshot data</strong> &#8212; the live directory can&#8217;t be reached from this preview (Sanity only allows approved domains; add the Netlify domain to the CORS allowlist at manage.sanity.io). Positions and details here are approximate; the deployed site shows the real CMS feed.</span>
+                <span><strong>These locations may be out of date.</strong> We can&#8217;t reach our live machine directory right now, so hours and availability below might have changed. Please call <a href="tel:+12014195933" style="color:#7A6127;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a> before you travel and we&#8217;ll confirm the nearest working machine.</span>
               </div>
             </sc-if>
             <sc-for list="{{ locs }}" as="l" hint-placeholder-count="0">
@@ -359,7 +359,12 @@ a:hover{color:#10263B}
                       </sc-for>
                     </div>
                   </sc-if>
-                  <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6FA8">Directions &#8599;</a>
+                  <sc-if value="{{ l.isOpen }}" hint-placeholder-val="{{ true }}">
+                    <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6FA8">Directions &#8599;</a>
+                  </sc-if>
+                  <sc-if value="{{ l.isClosed }}" hint-placeholder-val="{{ false }}">
+                    <span style="margin-top:auto;font-size:13.5px;line-height:1.5;color:#6B7B8C">This machine is temporarily out of service. Call <a href="tel:+12014195933" style="font-weight:600;color:#2E6FA8">201&#8209;419&#8209;5933</a> and we&#8217;ll point you at the nearest working one.</span>
+                  </sc-if>
                 </div>
               </div>
             </sc-for>
@@ -417,7 +422,7 @@ a:hover{color:#10263B}
           <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 14px;line-height:1.1">Talk to a human.</h2>
           <p style="color:#B8CCDE;font-size:17px;line-height:1.65;margin:0 0 36px;max-width:440px">Questions about a transaction, your first buy, or hosting a machine in your store &#8212; we answer.</p>
           <div style="display:flex;flex-direction:column;gap:18px">
-            <a href="tel:12014195933" style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:28px;color:#FFFFFF" style-hover="color:#8FC1E8">201&#8209;419&#8209;5933</a>
+            <a href="tel:+12014195933" style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:28px;color:#FFFFFF" style-hover="color:#8FC1E8">201&#8209;419&#8209;5933</a>
             <a href="mailto:team@quickiecoin.com" style="font-size:17px;color:#8FC1E8;font-weight:500" style-hover="color:#FFFFFF">team@quickiecoin.com</a>
             <div style="display:flex;gap:18px;font-size:15px;font-weight:500">
               <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#B8CCDE" style-hover="color:#FFFFFF">Instagram &#8599;</a>
@@ -444,6 +449,11 @@ a:hover{color:#10263B}
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Message
               <textarea name="message" rows="5" required="required" placeholder="How can we help?" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical" style-focus="border-color:#4E9CD8"></textarea>
             </label>
+            <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FDECEC;border:1px solid #F3C9C9;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.6;color:#8A2B2B">
+                That didn&#8217;t send &#8212; your message is still here, so you can try again. If it keeps failing, email <a href="mailto:team@quickiecoin.com" style="color:#8A2B2B;font-weight:600;text-decoration:underline">team@quickiecoin.com</a> or call <a href="tel:+12014195933" style="color:#8A2B2B;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a>.
+              </div>
+            </sc-if>
             <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Send message</button>
           </form>
         </sc-if>
@@ -451,7 +461,7 @@ a:hover{color:#10263B}
           <div style="background:#FFFFFF;border-radius:22px;padding:48px 34px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 28px 56px rgba(0,0,0,.28)">
             <div style="width:56px;height:56px;border-radius:50%;background:#E3F4EA;color:#1F7A4D;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;animation:qcPop .5s ease-out both">&#10003;</div>
             <p style="font-family:'Fredoka',sans-serif;font-size:23px;font-weight:500;color:#10263B;margin:0">Got it &#8212; we&#8217;ll get back to you shortly.</p>
-            <p style="color:#4A6076;font-size:15px;margin:0">Usually same day. In a hurry? <a href="tel:12014195933" style="font-weight:600">Call us.</a></p>
+            <p style="color:#4A6076;font-size:15px;margin:0">Usually same day. In a hurry? <a href="tel:+12014195933" style="font-weight:600">Call us.</a></p>
             <span onClick="{{ resetContact }}" style="color:#2E6FA8;font-weight:600;font-size:14px;cursor:pointer;margin-top:6px">Send another message</span>
           </div>
         </sc-if>
@@ -515,7 +525,7 @@ a:hover{color:#10263B}
           <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:42px;color:#FFFFFF;margin:0 0 14px;line-height:1.12">Start the conversation.</h2>
           <p style="color:rgba(255,255,255,.88);font-size:17px;line-height:1.65;margin:0 0 26px;max-width:460px">Tell us who you are and roughly what you&#8217;re looking to buy. A real person replies with next steps &#8212; usually the same day.</p>
           <div style="display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,.92);font-size:15px;font-weight:500">
-            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:+12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
           </div>
         </div>
         <sc-if value="{{ wireNotSent }}" hint-placeholder-val="{{ true }}">
@@ -530,9 +540,11 @@ a:hover{color:#10263B}
                 <input name="email" type="email" required="required" placeholder="satoshi@nakamoto.com" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
               </label>
             </div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Phone <span style="font-weight:400;color:#93A7BA">(optional)</span>
+              <input name="phone" type="tel" autoComplete="tel" placeholder="201-555-0142" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+            </label>
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Approximate amount
               <select name="amount" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;appearance:auto" style-focus="border-color:#4E9CD8">
-                <option>Under $10,000</option>
                 <option>$10,000 &#8211; $50,000</option>
                 <option>$50,000 &#8211; $250,000</option>
                 <option>$250,000+</option>
@@ -542,6 +554,11 @@ a:hover{color:#10263B}
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Anything else? <span style="font-weight:400;color:#93A7BA">(optional)</span>
               <textarea name="note" rows="3" placeholder="Timing, questions, how you found us&#8230;" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical"></textarea>
             </label>
+            <sc-if value="{{ wireError }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FDECEC;border:1px solid #F3C9C9;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.6;color:#8A2B2B">
+                That didn&#8217;t send &#8212; your details are still here, so you can try again. If it keeps failing, email <a href="mailto:team@quickiecoin.com" style="color:#8A2B2B;font-weight:600;text-decoration:underline">team@quickiecoin.com</a> or call <a href="tel:+12014195933" style="color:#8A2B2B;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a>.
+              </div>
+            </sc-if>
             <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Request wire details</button>
             <span style="font-size:12.5px;color:#93A7BA;text-align:center">No obligation &#8212; this just starts an email thread with us.</span>
           </form>
@@ -586,16 +603,16 @@ a:hover{color:#10263B}
   &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
 }">
 class Component extends DCLogic {
-  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, openFaq: 0 };
+  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
 
   static SNAPSHOT = [
-    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7699, long: -74.025, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
-    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029', lat: 40.7405, long: -74.1553, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400' },
-    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7523, long: -74.053, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400' },
-    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.7484, long: -74.0492, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400' },
-    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.7118, long: -74.087, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400' },
-    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7345, long: -74.0665, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400' },
-    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002', lat: 40.6748, long: -74.1069, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400' }
+    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
+    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400' },
+    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400' },
+    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400' },
+    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400' },
+    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400' },
+    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400' }
   ];
 
   componentDidMount() {
@@ -660,13 +677,21 @@ class Component extends DCLogic {
     this._map = m; this._mapEl = el;
   }
 
-  submitNetlifyForm(e, sentKey) {
+  submitNetlifyForm(e, sentKey, errKey) {
     e.preventDefault();
     const form = e.target;
     const body = new URLSearchParams(new FormData(form)).toString();
+    this.setState({ [errKey]: false });
     fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
-      .then(() => { form.reset(); this.setState({ [sentKey]: true }); })
-      .catch(() => this.setState({ [sentKey]: true }));
+      .then(r => {
+        // A non-2xx response still resolves the promise. Without this check a
+        // Netlify outage would show the customer a "thanks" for a submission
+        // that was never captured. Only reset the form once it really landed.
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        form.reset();
+        this.setState({ [sentKey]: true });
+      })
+      .catch(() => this.setState({ [errKey]: true }));
   }
 
   go(page) { this.setState({ page }); window.scrollTo({ top: 0 }); }
@@ -734,8 +759,9 @@ class Component extends DCLogic {
           hours: hours, hasHours: hours.length > 0,
           dir: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((l.location || '') + ' ' + (l.address || '')),
           wrapStyle: { background: '#FFFFFF', border: '1px solid #E1EAF2', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: l.open ? 1 : 0.55, boxShadow: '0 10px 24px rgba(16,38,59,.06)' },
+          isOpen: !!l.open, isClosed: !l.open,
           badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#6B7B8C' },
-          badgeText: l.open ? '● Live' : 'Offline',
+          badgeText: l.open ? '● Live' : 'Temporarily unavailable',
           sellsToo: /bayonne/i.test(l.address || '')
         };
       });
@@ -776,10 +802,12 @@ class Component extends DCLogic {
       openCount: raw.filter(l => l.open).length,
       faqList: faqList,
       contactSent: st.contactSent, contactNotSent: !st.contactSent,
-      submitContact: e => this.submitNetlifyForm(e, 'contactSent'),
+      contactError: st.contactError,
+      submitContact: e => this.submitNetlifyForm(e, 'contactSent', 'contactError'),
       resetContact: () => this.setState({ contactSent: false }),
       wireSent: st.wireSent, wireNotSent: !st.wireSent,
-      submitWire: e => this.submitNetlifyForm(e, 'wireSent'),
+      wireError: st.wireError,
+      submitWire: e => this.submitNetlifyForm(e, 'wireSent', 'wireError'),
       resetWire: () => this.setState({ wireSent: false })
     };
   }
