@@ -1,0 +1,17 @@
+# Legacy paths from the v1 Nuxt site, which Google still has indexed and which
+# return a Netlify 404 today. Each path below was confirmed to return 200 on
+# https://quickiecoin.netlify.app before being listed here.
+#
+# The homepage is a single client-hydrated document with in-page sections, so
+# legacy routes land on the matching anchor rather than a page of their own.
+#
+# Deliberately NOT a /* catch-all: that would serve the homepage with a 200 for
+# every mistyped URL, turning real 404s into soft 404s. Unmatched paths fall
+# through to 404.html with a real 404 status.
+
+/locations/*   /#locations   301
+/locations     /#locations   301
+/faqs/*        /#faqs        301
+/faqs          /#faqs        301
+/wires/*       /             301
+/wires         /             301
