@@ -699,13 +699,13 @@ class Component extends DCLogic {
   state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
 
   static SNAPSHOT = [
-    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400&auto=format' },
-    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400&auto=format' },
-    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400&auto=format' },
-    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400&auto=format' },
-    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400&auto=format' },
-    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400&auto=format' },
-    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400&auto=format' }
+    { _id: 'snap1', radarUrl: 'https://coinatmradar.com/bitcoin_atm/103781/bitcoin-atm-lamassu-north-bergen-wine-spot/', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400&auto=format' },
+    { _id: 'snap2', radarUrl: 'https://coinatmradar.com/bitcoin_atm/111506/bitcoin-atm-lamassu-harrison-cork-wine-spirits/', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400&auto=format' },
+    { _id: 'snap3', radarUrl: 'https://coinatmradar.com/bitcoin_atm/111507/bitcoin-atm-lamassu-jersey-city-signature-smoke-shop/', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400&auto=format' },
+    { _id: 'snap4', radarUrl: 'https://coinatmradar.com/bitcoin_atm/94712/bitcoin-atm-lamassu-bayonne-zuys-smoke-shop/', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400&auto=format' },
+    { _id: 'snap5', radarUrl: 'https://coinatmradar.com/bitcoin_atm/26233/bitcoin-atm-lamassu-jersey-city-cell-2-go/', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400&auto=format' },
+    { _id: 'snap6', radarUrl: 'https://coinatmradar.com/bitcoin_atm/78175/bitcoin-atm-lamassu-jersey-city-state-news/', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400&auto=format' },
+    { _id: 'snap7', radarUrl: 'https://coinatmradar.com/bitcoin_atm/71607/bitcoin-atm-lamassu-bayonne-teamwork-wireless/', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400&auto=format' }
   ];
 
   componentDidMount() {
@@ -1023,16 +1023,26 @@ class Component extends DCLogic {
           isOpen: !!l.open, isClosed: !l.open,
           badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#687788' },
           badgeText: l.open ? '● Live' : 'Temporarily unavailable',
-          sellsToo: /bayonne/i.test(l.address || '')
+          // Teamwork Wireless is the only two-way unit (confirmed 2026-09-04). This used to
+          // test the address for 'bayonne', which is a town, not a capability: Zuys sat in
+          // Coin ATM Radar as Bayonne for months, and any future Bayonne host would have
+          // advertised cash-out it cannot do. Key off the machine instead.
+          sellsToo: /teamwork/i.test(((l.location || '') + ' ' + (l.name || '')))
         };
       });
 
+    // Rendered only when the Sanity fetch fails. Kept deliberately short and in
+    // step with the CMS FAQ rewritten 2026-09-04 - the previous version promised
+    // to have cash ready if you called ahead (an operational commitment nobody
+    // agreed to) and described limits as "higher than you might expect" rather
+    // than stating the configured cap. A fallback that contradicts the real FAQ
+    // is worse than no fallback.
     const fallbackFaqs = [
-      { question: 'Do I need an account?', answer: 'No account with us — ever. All you need is a bitcoin wallet app on your phone (any one you like) and cash.' },
-      { question: 'What do I need to bring?', answer: 'Cash and your phone, with a bitcoin wallet app on it. Verification is quick and scales with the amount you are buying.' },
-      { question: 'How fast do I get my bitcoin?', answer: 'It is sent the moment you confirm on the machine — you will usually see it arrive in your wallet before you are out the door.' },
-      { question: 'Can I sell bitcoin for cash?', answer: 'Yes — cash-out is available at our Teamwork Wireless machine in Bayonne. Call ahead for larger amounts and we will make sure the cash is there.' },
-      { question: 'What are the limits?', answer: 'Higher than you might expect — limits depend on your verification level, and the machines comfortably handle larger buys. Moving serious size? Our **wire desk** handles that — same people, better rate.' }
+      { question: 'What do I need before I come?', answer: 'A bitcoin wallet app on your phone that can show your receive address as a QR code. That is the whole prerequisite.' },
+      { question: 'How long does it take?', answer: 'About a minute. Scan your wallet, feed in your cash, confirm the amount on screen - the bitcoin is on its way before you leave the store.' },
+      { question: 'What ID do I need?', answer: 'You start with a phone number. Verification requirements increase with the size of the transaction, and the machine tells you on screen exactly what it needs before you put any cash in.' },
+      { question: 'What are the limits?', answer: 'Up to $25,000 per day, per customer.' },
+      { question: 'Can I sell bitcoin for cash?', answer: 'Yes - at our Teamwork Wireless machine in Bayonne. Every other machine in the fleet is buy-only.' }
     ];
     const cmsItems = [];
     (st.faqs || []).forEach(doc => (doc.faqItems || []).forEach(it => cmsItems.push(it)));
