@@ -5,19 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QuickieCoin</title>
 <meta name="description" content="The easiest way to buy Bitcoin in Hudson County, NJ. Walk up with cash, walk out with bitcoin — no account, no bank, no waiting.">
+<link rel="canonical" href="https://quickiecoin.com/">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<meta name="theme-color" content="#F4F8FB">
+<link rel="preconnect" href="https://dkkl7znc.apicdn.sanity.io" crossorigin="anonymous">
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin="anonymous">
+<link rel="preconnect" href="https://api.coinbase.com" crossorigin="anonymous">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://quickiecoin.com/">
 <meta property="og:site_name" content="QuickieCoin">
 <meta property="og:title" content="QuickieCoin — The easiest way to buy Bitcoin">
 <meta property="og:description" content="Walk up with cash, walk out with bitcoin. Machines across Jersey City, Harrison and Bayonne — no account, no bank, no waiting.">
-<meta property="og:image" content="https://quickiecoin.com/assets/images/douro.jpg">
-<meta property="og:image:width" content="2500">
-<meta property="og:image:height" content="1875">
+<meta property="og:image" content="https://quickiecoin.com/assets/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A Lamassu bitcoin machine on a store counter.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="QuickieCoin — The easiest way to buy Bitcoin">
 <meta name="twitter:description" content="Walk up with cash, walk out with bitcoin. Machines across Jersey City, Harrison and Bayonne — no account, no bank, no waiting.">
-<meta name="twitter:image" content="https://quickiecoin.com/assets/images/douro.jpg">
+<meta name="twitter:image" content="https://quickiecoin.com/assets/images/og-image.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://quickiecoin.com/#organization",
+  "name": "QuickieCoin",
+  "legalName": "QuickieCoin NJ LLC",
+  "url": "https://quickiecoin.com/",
+  "logo": "https://quickiecoin.com/assets/images/logo.png",
+  "image": "https://quickiecoin.com/assets/images/og-image.jpg",
+  "description": "Bitcoin ATMs in host stores across Hudson County, New Jersey. A FinCEN-registered money services business.",
+  "telephone": "+1-201-419-5933",
+  "email": "team@quickiecoin.com",
+  "foundingDate": "2018",
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "Hudson County, New Jersey"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "301 Route 17 North, Suite 800 #12-40",
+    "addressLocality": "Rutherford",
+    "addressRegion": "NJ",
+    "postalCode": "07070",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://instagram.com/quickiecoin",
+    "https://twitter.com/quickiecoin"
+  ]
+}
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -620,8 +659,8 @@ class Component extends DCLogic {
     const q = encodeURIComponent('{"machines": *[_type == "machine"], "faqs": *[_type == "faqs"]}');
     fetch('https://dkkl7znc.apicdn.sanity.io/v2021-10-21/data/query/production?query=' + q)
       .then(r => r.json())
-      .then(d => { const res = (d && d.result) || {}; this.setState({ locations: res.machines || [], faqs: res.faqs || [] }); })
-      .catch(() => this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }));
+      .then(d => { const res = (d && d.result) || {}; const ms = res.machines || []; this.setState({ locations: ms, faqs: res.faqs || [] }); this.injectLocationSchema(ms); })
+      .catch(() => { this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }); this.injectLocationSchema(Component.SNAPSHOT); });
     fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot')
       .then(r => r.json())
       .then(d => { const n = parseFloat(d && d.data && d.data.amount); if (n) this.setState({ price: '$' + Math.round(n).toLocaleString('en-US') }); })
@@ -635,6 +674,109 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearInterval(this._stepTimer); clearInterval(this._mapTimer);
     if (this._map) { try { this._map.remove(); } catch (e) {} }
+  }
+
+  // ---- structured data -------------------------------------------------
+  // One LocalBusiness per machine, injected once the CMS query resolves.
+  // Built from the live records rather than a hard-coded list, so it cannot
+  // drift the way the snapshot fallback did.
+
+  parseAddress(addr) {
+    const parts = String(addr || '').split(',').map(x => x.trim()).filter(Boolean);
+    if (parts.length < 3) return null;
+    if (/^(usa|united states)$/i.test(parts[parts.length - 1])) parts.pop();
+    const tail = parts.pop() || '';
+    const m = tail.match(/^([A-Za-z]{2})\s+(\d{5}(?:-\d{4})?)$/);
+    if (!m || parts.length < 2) return null;
+    const locality = parts.pop();
+    return {
+      '@type': 'PostalAddress',
+      streetAddress: parts.join(', '),
+      addressLocality: locality,
+      addressRegion: m[1],
+      postalCode: m[2],
+      addressCountry: 'US'
+    };
+  }
+
+  parseHours(hours) {
+    const DAY = { mo: 'Mo', tu: 'Tu', we: 'We', th: 'Th', fr: 'Fr', sa: 'Sa', su: 'Su' };
+    const day = t => {
+      const k = String(t).trim().slice(0, 2).toLowerCase();
+      return DAY[k] || null;
+    };
+    const time = t => {
+      const m = String(t).trim().match(/^(\d{1,2})(?::(\d{2}))?\s*([ap])m?$/i);
+      if (!m) return null;
+      let h = parseInt(m[1], 10);
+      if (h > 12) return null;
+      const mer = m[3].toLowerCase();
+      if (mer === 'a' && h === 12) h = 0;
+      if (mer === 'p' && h !== 12) h += 12;
+      return String(h).padStart(2, '0') + ':' + (m[2] || '00');
+    };
+    const out = [];
+    (hours || []).forEach(raw => {
+      const line = String(raw).replace(/[‐-―]/g, '-').replace(/[  ]/g, ' ').trim();
+      const seg = line.match(/^(.*?):\s*(.*)$/);
+      if (!seg) return;
+      const dayPart = seg[1].trim(), timePart = seg[2].trim();
+      if (/closed/i.test(timePart)) return;
+      const t = timePart.split('-').map(x => x.trim());
+      if (t.length !== 2) return;
+      const open = time(t[0]), close = time(t[1]);
+      if (!open || !close) return;
+      let days;
+      if (/every\s*day|daily|^all/i.test(dayPart)) days = 'Mo-Su';
+      else if (dayPart.includes('-')) {
+        const d = dayPart.split('-').map(x => day(x));
+        if (!d[0] || !d[1]) return;
+        days = (d[0] === 'Su' && d[1] === 'Sa') ? 'Mo-Su' : d[0] + '-' + d[1];
+      } else {
+        const d = day(dayPart);
+        if (!d) return;
+        days = d;
+      }
+      out.push(days + ' ' + open + '-' + close);
+    });
+    return out;
+  }
+
+  injectLocationSchema(machines) {
+    try {
+      if (!Array.isArray(machines) || !machines.length) return;
+      const items = machines.map(m => {
+        const name = m.location || m.name;
+        if (!name) return null;
+        const node = {
+          '@type': 'LocalBusiness',
+          '@id': 'https://quickiecoin.com/#machine-' + String(m._id || name).replace(/[^A-Za-z0-9_-]/g, ''),
+          name: 'QuickieCoin Bitcoin ATM - ' + name,
+          description: 'Buy bitcoin for cash at a QuickieCoin machine inside ' + name + '.',
+          telephone: '+1-201-419-5933',
+          url: 'https://quickiecoin.com/#locations',
+          parentOrganization: { '@id': 'https://quickiecoin.com/#organization' },
+          currenciesAccepted: 'USD',
+          paymentAccepted: 'Cash'
+        };
+        const addr = this.parseAddress(m.address);
+        if (addr) node.address = addr;
+        if (typeof m.lat === 'number' && typeof m.long === 'number') {
+          node.geo = { '@type': 'GeoCoordinates', latitude: m.lat, longitude: m.long };
+        }
+        const hrs = this.parseHours(m.hours);
+        if (hrs.length) node.openingHours = hrs;
+        return node;
+      }).filter(Boolean);
+      if (!items.length) return;
+      const prev = document.getElementById('qc-locations-ld');
+      if (prev) prev.remove();
+      const el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = 'qc-locations-ld';
+      el.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': items });
+      document.head.appendChild(el);
+    } catch (e) { /* structured data is best-effort; never break hydration */ }
   }
 
   ensureMap() {
