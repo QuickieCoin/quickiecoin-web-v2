@@ -57,6 +57,25 @@
   ]
 }
 </script>
+<script>
+/* Self-host React and ReactDOM. support.js's cdnScriptFor() checks
+   window.__resources for an override before falling back to unpkg, so this
+   must run BEFORE support.js (which loads synchronously).
+
+   unpkg is a free community CDN with no SLA; if it is slow or down this page
+   is blank, and subresource integrity protects against tampering but does
+   nothing for availability. The vendored files are byte-identical to the
+   pinned versions — their sha384 hashes were checked against the SRI
+   constants in support.js before committing.
+
+   Note: cdnScriptFor drops the integrity attribute when an override is
+   present. That is correct here — these are same-origin files covered by
+   TLS and the deploy pipeline, not third-party ones. */
+window.__resources = {
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/vendor/react-18.3.1.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/vendor/react-dom-18.3.1.production.min.js"
+};
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -64,9 +83,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Outfit:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@600&amp;display=swap">
 <style>
 html,body{margin:0;padding:0}
 body{background:#F4F8FB;color:#10263B;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -128,6 +145,17 @@ a:hover{color:#10263B}
   .qc-form-row{grid-template-columns:1fr!important}
   .qc-form button[type=submit]{width:100%!important}
 }
+/* Honour prefers-reduced-motion: eight keyframe animations run on this page
+   (qcLaser, qcBill, qcCoin, qcPop, qcPulse, qcFloat, qcSkel, qcDash) plus the
+   auto-advancing hero carousel, which is paused separately in the logic. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important
+  }
+}
 @media (max-width:540px){
   .qc-app h1{font-size:clamp(27px,8.4vw,34px)!important}
   .qc-sec{padding:46px 18px!important}
@@ -141,11 +169,12 @@ a:hover{color:#10263B}
 </style>
 </helmet>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#4E9CD8"/><circle cx="60" cy="60" r="26" fill="#FFFFFF"/><text x="60" y="71" font-family="sans-serif" font-size="32" font-weight="700" fill="#F7931A" text-anchor="middle">&#8383;</text></svg></template>
+<a href="#how" style="position:absolute;left:-9999px;top:0;z-index:100;background:#10263B;color:#FFFFFF;padding:12px 20px;border-radius:0 0 10px 0;font-weight:600" style-focus="left:0">Skip to content</a>
 <div class="qc-app" style="min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden">
   <nav style="position:sticky;top:0;z-index:50;background:rgba(244,248,251,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E1EAF2">
     <div class="qc-nav" style="max-width:1180px;margin:0 auto;padding:0 28px;height:74px;display:flex;align-items:center;gap:28px">
       <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;flex-shrink:0">
-        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:30px;display:block">
+        <img src="assets/images/logo.webp" alt="QuickieCoin" style="height:30px;display:block">
       </div>
       <div class="qc-navlinks" style="display:flex;align-items:center;gap:22px;flex:1;font-size:15px;font-weight:500;color:#3D5570">
         <span onClick="{{ goHow }}" style="cursor:pointer;padding:6px 2px" style-hover="color:#2E6FA8">How it works</span>
@@ -194,7 +223,11 @@ a:hover{color:#10263B}
         </div>
         <div class="qc-col qc-hero-visual" style="flex:1;min-width:380px;position:relative">
           <div style="border-radius:28px;overflow:hidden;box-shadow:0 32px 64px rgba(16,38,59,.22);aspect-ratio:4/3.4;position:relative">
-            <img src="assets/images/douro.jpg" alt="Lamassu Douro bitcoin machine on a store counter" style="width:100%;height:100%;object-fit:cover;display:block">
+            <picture>
+              <source type="image/webp" sizes="(max-width:820px) 92vw, 46vw" srcset="assets/images/douro-640w.webp 640w, assets/images/douro-1040w.webp 1040w, assets/images/douro-1400w.webp 1400w">
+              <source type="image/jpeg" sizes="(max-width:820px) 92vw, 46vw" srcset="assets/images/douro-640w.jpg 640w, assets/images/douro-1040w.jpg 1040w, assets/images/douro-1400w.jpg 1400w">
+              <img src="assets/images/douro-1040w.jpg" width="1040" height="780" fetchPriority="high" decoding="async" alt="Lamassu Douro bitcoin machine on a store counter" style="width:100%;height:100%;object-fit:cover;display:block">
+            </picture>
             <div style="position:absolute;left:18px;bottom:18px;background:rgba(16,38,59,.82);backdrop-filter:blur(6px);color:#FFFFFF;border-radius:14px;padding:10px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px">
               <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5"></span>
               Lamassu machines at every location &#8212; this one&#8217;s the Douro
@@ -227,7 +260,7 @@ a:hover{color:#10263B}
         <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 8px;line-height:1.1">Cash to bitcoin in under a minute.</h2>
         <p style="color:rgba(255,255,255,.85);font-size:17px;margin:0 0 54px;max-width:560px;line-height:1.6">Three steps on the machine. First time? The screen walks you through it &#8212; or call and a human picks up.</p>
         <div class="qc-how-cols" style="display:flex;gap:56px;align-items:center;flex-wrap:wrap">
-          <div class="qc-col qc-how-visual" style="flex:1.05;min-width:420px;display:flex;flex-direction:column;align-items:center;gap:22px">
+          <div class="qc-col qc-how-visual" onMouseEnter="{{ holdCarousel }}" onMouseLeave="{{ releaseCarousel }}" onFocus="{{ holdCarousel }}" onBlur="{{ releaseCarousel }}" style="flex:1.05;min-width:420px;display:flex;flex-direction:column;align-items:center;gap:22px">
             <div class="qc-mockup" style="position:relative;width:520px;height:430px;max-width:100%">
               <div style="position:absolute;left:36px;top:6px;width:296px;height:396px;background:#FFFFFF;border-radius:26px;box-shadow:0 28px 56px rgba(9,38,66,.32)">
                 <div style="position:absolute;left:24px;top:24px;width:248px;height:156px;background:#0E2A47;border-radius:14px;padding:8px;box-sizing:border-box">
@@ -378,7 +411,7 @@ a:hover{color:#10263B}
               <div style="{{ l.wrapStyle }}">
                 <div style="height:190px;position:relative;background:#E9F1F8">
                   <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
-                    <div style="{{ l.imgStyle }}"></div>
+                    <img src="{{ l.img }}" alt="{{ l.imgAlt }}" loading="lazy" decoding="async" width="320" height="170" style="position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);object-fit:contain;display:block">
                   </sc-if>
                   <sc-if value="{{ l.noImg }}" hint-placeholder-val="{{ true }}">
                     <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#93A7BA">STOREFRONT PHOTO</span>
@@ -399,7 +432,12 @@ a:hover{color:#10263B}
                     </div>
                   </sc-if>
                   <sc-if value="{{ l.isOpen }}" hint-placeholder-val="{{ true }}">
-                    <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6FA8">Directions &#8599;</a>
+                    <span style="margin-top:auto;display:flex;gap:16px;flex-wrap:wrap;font-weight:600;font-size:14px">
+                      <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="color:#2E6FA8">Directions &#8599;</a>
+                      <sc-if value="{{ l.hasRadar }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ l.radar }}" target="_blank" rel="noopener noreferrer" style="color:#2E6FA8">Live rate &amp; fees &#8599;</a>
+                      </sc-if>
+                    </span>
                   </sc-if>
                   <sc-if value="{{ l.isClosed }}" hint-placeholder-val="{{ false }}">
                     <span style="margin-top:auto;font-size:13.5px;line-height:1.5;color:#6B7B8C">This machine is temporarily out of service. Call <a href="tel:+12014195933" style="font-weight:600;color:#2E6FA8">201&#8209;419&#8209;5933</a> and we&#8217;ll point you at the nearest working one.</span>
@@ -618,7 +656,7 @@ a:hover{color:#10263B}
   <footer style="background:#0B2036;margin-top:auto">
     <div style="max-width:1180px;margin:0 auto;padding:40px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;gap:10px">
-        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:24px;display:block;filter:brightness(0) invert(1);opacity:.9;align-self:flex-start">
+        <img src="assets/images/logo.webp" alt="QuickieCoin" style="height:24px;display:block;filter:brightness(0) invert(1);opacity:.9;align-self:flex-start">
         <span style="color:#6E88A3;font-size:13px;max-width:480px;line-height:1.6">&#169; 2026 QuickieCoin NJ LLC &#183; A FinCEN&#8209;registered money services business. Buy bitcoin for cash at our machines across Hudson County, New Jersey.</span>
       </div>
       <div style="display:flex;gap:22px;font-size:14px;font-weight:500;flex-wrap:wrap">
@@ -646,13 +684,13 @@ class Component extends DCLogic {
   state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
 
   static SNAPSHOT = [
-    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
-    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400' },
-    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400' },
-    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400' },
-    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400' },
-    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400' },
-    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400' }
+    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400&auto=format' },
+    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400&auto=format' },
+    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400&auto=format' },
+    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400&auto=format' },
+    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400&auto=format' },
+    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400&auto=format' },
+    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400&auto=format' }
   ];
 
   componentDidMount() {
@@ -665,15 +703,74 @@ class Component extends DCLogic {
       .then(r => r.json())
       .then(d => { const n = parseFloat(d && d.data && d.data.amount); if (n) this.setState({ price: '$' + Math.round(n).toLocaleString('en-US') }); })
       .catch(() => {});
+    this._reduceMotion = typeof matchMedia === 'function'
+      && matchMedia('(prefers-reduced-motion: reduce)').matches;
     this._stepTimer = setInterval(() => {
-      if (this.props.autoPlayDemo ?? true) this.setState(s => ({ step: (s.step + 1) % 3 }));
+      if (!(this.props.autoPlayDemo ?? true)) return;
+      // Don't advance for someone who asked for reduced motion, while the tab
+      // is in the background, or while the carousel is being read or hovered.
+      if (this._reduceMotion || document.hidden || this._carouselHold) return;
+      this.setState(s => ({ step: (s.step + 1) % 3 }));
     }, 3800);
-    this._mapTimer = setInterval(() => this.ensureMap(), 450);
+    this.watchMap();
+  }
+
+  componentDidUpdate() {
+    // The map node is created and destroyed as the view changes, so re-arm the
+    // observer whenever a different #qc-map appears. Cheap, and only on state
+    // changes — the old code polled getElementById every 450ms forever.
+    this.watchMap();
   }
 
   componentWillUnmount() {
-    clearInterval(this._stepTimer); clearInterval(this._mapTimer);
+    clearInterval(this._stepTimer);
+    if (this._io) { this._io.disconnect(); this._io = null; }
     if (this._map) { try { this._map.remove(); } catch (e) {} }
+  }
+
+  // ---- map loading -----------------------------------------------------
+  // Leaflet (147 KB) and its tile requests are for a map below the fold, so
+  // neither is fetched until the map is close to the viewport.
+
+  watchMap() {
+    const el = document.getElementById('qc-map');
+    if (!el) {
+      if (this._io) { this._io.disconnect(); this._io = null; }
+      this._watched = null;
+      if (this._map) { try { this._map.remove(); } catch (e) {} this._map = null; this._mapEl = null; }
+      return;
+    }
+    if (this._watched === el) { if (window.L && this._mapEl !== el) this.ensureMap(); return; }
+    this._watched = el;
+    if (this._io) this._io.disconnect();
+    if (typeof IntersectionObserver !== 'function') { this.loadLeaflet().then(() => this.ensureMap()); return; }
+    this._io = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      if (this._io) { this._io.disconnect(); this._io = null; }
+      this.loadLeaflet().then(() => this.ensureMap()).catch(() => {});
+    }, { rootMargin: '400px 0px' });
+    this._io.observe(el);
+  }
+
+  loadLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (this._leafletPromise) return this._leafletPromise;
+    this._leafletPromise = new Promise((resolve, reject) => {
+      if (!document.getElementById('qc-leaflet-css')) {
+        const link = document.createElement('link');
+        link.id = 'qc-leaflet-css';
+        link.rel = 'stylesheet';
+        link.href = '/vendor/leaflet-1.9.4.css';
+        document.head.appendChild(link);
+      }
+      const sc = document.createElement('script');
+      sc.src = '/vendor/leaflet-1.9.4.js';
+      sc.async = true;
+      sc.onload = () => resolve();
+      sc.onerror = () => reject(new Error('leaflet failed to load'));
+      document.head.appendChild(sc);
+    });
+    return this._leafletPromise;
   }
 
   // ---- structured data -------------------------------------------------
@@ -806,7 +903,7 @@ class Component extends DCLogic {
       className: '',
       html: '<div style="position:relative;width:40px;height:50px;filter:drop-shadow(0 3px 6px rgba(16,38,59,.4))">'
         + '<div style="position:absolute;left:50%;margin-left:-8px;top:34px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:14px solid #FFFFFF"></div>'
-        + '<div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><img src="assets/images/qpin.png" style="width:30px;height:30px;object-fit:contain;display:block"></div>'
+        + '<div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><img src="assets/images/qpin.png" alt="" style="width:30px;height:30px;object-fit:contain;display:block"></div>'
         + '</div>',
       iconSize: [40, 50], iconAnchor: [20, 50], popupAnchor: [0, -46]
     });
@@ -853,7 +950,7 @@ class Component extends DCLogic {
   }
 
   imgUrl(t) {
-    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max'; }
+    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max&auto=format'; }
     catch (e) { return null; }
   }
 
@@ -898,9 +995,11 @@ class Component extends DCLogic {
         return {
           key: l._id, name: l.location || l.name || 'QuickieCoin machine', addr: l.address || '',
           hasImg: !!img, noImg: !img,
-          imgStyle: img ? { position: 'absolute', inset: '10px', backgroundImage: 'url(' + img + ')', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : null,
+          img: img, imgAlt: 'Storefront of ' + (l.location || l.name || 'a QuickieCoin machine location'),
           hours: hours, hasHours: hours.length > 0,
           dir: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((l.location || '') + ' ' + (l.address || '')),
+          radar: typeof l.radarUrl === 'string' ? l.radarUrl.trim() : '',
+          hasRadar: typeof l.radarUrl === 'string' && l.radarUrl.trim() !== '',
           wrapStyle: { background: '#FFFFFF', border: '1px solid #E1EAF2', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: l.open ? 1 : 0.55, boxShadow: '0 10px 24px rgba(16,38,59,.06)' },
           isOpen: !!l.open, isClosed: !l.open,
           badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#6B7B8C' },
@@ -937,6 +1036,8 @@ class Component extends DCLogic {
       s0: st.step === 0, s1: st.step === 1, s2: st.step === 2,
       stepCaption: ['SCANNING WALLET…', 'COUNTING CASH…', 'BITCOIN SENT ✓'][st.step],
       goStep0: () => this.setState({ step: 0 }), goStep1: () => this.setState({ step: 1 }), goStep2: () => this.setState({ step: 2 }),
+      holdCarousel: () => { this._carouselHold = true; },
+      releaseCarousel: () => { this._carouselHold = false; },
       dot0: dot(st.step === 0), dot1: dot(st.step === 1), dot2: dot(st.step === 2),
       card0: card(st.step === 0), card1: card(st.step === 1), card2: card(st.step === 2),
       num0: num(st.step === 0), num1: num(st.step === 1), num2: num(st.step === 2),
