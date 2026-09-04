@@ -4,12 +4,21 @@
 # round trip per asset per visit — about ten of them, which is noticeable on
 # mobile.
 #
-# NOTE ON `immutable`: these filenames are NOT content-hashed. `immutable` with
-# a one-year max-age would make a stale asset unfixable without renaming the
-# file, so the asset directories get one week instead. /vendor/ IS effectively
-# immutable — every file there carries its exact upstream version in the name
-# (react-18.3.1..., leaflet-1.9.4...) and a version bump changes the filename —
-# so it gets the full year.
+# NOTE ON `immutable`: only content-addressed filenames get a long TTL.
+#
+# /vendor/ is effectively immutable — every file carries its exact upstream
+# version in the name (react-18.3.1..., leaflet-1.9.4...) and a version bump
+# changes the filename — so it gets the full year.
+#
+# assets/pages.<hash>.css carries a content hash, so it gets the year too.
+# Editing it produces a new filename and a new URL; nothing can go stale.
+#
+# Everything else under /assets/ is NOT hashed (logo.webp, douro-*.webp,
+# og-image.jpg). Those had one week, and that was a mistake we shipped: when
+# pages.css was unhashed, every visitor who had loaded the site was pinned to
+# a stale stylesheet for up to a week, and the header rendered unstyled. One
+# day bounds that damage while still covering repeat visits. Hash the filename
+# of anything under here that changes with the markup.
 #
 # HTML stays uncached so content and CMS-driven markup update immediately.
 # Netlify already sets HSTS.
@@ -23,11 +32,15 @@
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Content-hashed: safe to pin forever. Must precede the /assets/* rule.
+/assets/pages.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
 /assets/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=86400
 
 /static/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=86400
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
