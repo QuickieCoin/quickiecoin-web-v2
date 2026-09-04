@@ -1,23 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QuickieCoin</title>
 <meta name="description" content="The easiest way to buy Bitcoin in Hudson County, NJ. Walk up with cash, walk out with bitcoin — no account, no bank, no waiting.">
+<link rel="canonical" href="https://quickiecoin.com/">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<meta name="theme-color" content="#F4F8FB">
+<link rel="preconnect" href="https://dkkl7znc.apicdn.sanity.io" crossorigin="anonymous">
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin="anonymous">
+<link rel="preconnect" href="https://api.coinbase.com" crossorigin="anonymous">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://quickiecoin.com/">
 <meta property="og:site_name" content="QuickieCoin">
 <meta property="og:title" content="QuickieCoin — The easiest way to buy Bitcoin">
 <meta property="og:description" content="Walk up with cash, walk out with bitcoin. Machines across Jersey City, Harrison and Bayonne — no account, no bank, no waiting.">
-<meta property="og:image" content="https://quickiecoin.com/assets/images/douro.jpg">
-<meta property="og:image:width" content="2500">
-<meta property="og:image:height" content="1875">
+<meta property="og:image" content="https://quickiecoin.com/assets/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A Lamassu bitcoin machine on a store counter.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="QuickieCoin — The easiest way to buy Bitcoin">
 <meta name="twitter:description" content="Walk up with cash, walk out with bitcoin. Machines across Jersey City, Harrison and Bayonne — no account, no bank, no waiting.">
-<meta name="twitter:image" content="https://quickiecoin.com/assets/images/douro.jpg">
+<meta name="twitter:image" content="https://quickiecoin.com/assets/images/og-image.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://quickiecoin.com/#organization",
+  "name": "QuickieCoin",
+  "legalName": "QuickieCoin NJ LLC",
+  "url": "https://quickiecoin.com/",
+  "logo": "https://quickiecoin.com/assets/images/logo.png",
+  "image": "https://quickiecoin.com/assets/images/og-image.jpg",
+  "description": "Bitcoin ATMs in host stores across Hudson County, New Jersey. A FinCEN-registered money services business.",
+  "telephone": "+1-201-419-5933",
+  "email": "team@quickiecoin.com",
+  "foundingDate": "2018",
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "Hudson County, New Jersey"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "301 Route 17 North, Suite 800 #12-40",
+    "addressLocality": "Rutherford",
+    "addressRegion": "NJ",
+    "postalCode": "07070",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://instagram.com/quickiecoin",
+    "https://twitter.com/quickiecoin"
+  ]
+}
+</script>
+<script>
+/* Self-host React and ReactDOM. support.js's cdnScriptFor() checks
+   window.__resources for an override before falling back to unpkg, so this
+   must run BEFORE support.js (which loads synchronously).
+
+   unpkg is a free community CDN with no SLA; if it is slow or down this page
+   is blank, and subresource integrity protects against tampering but does
+   nothing for availability. The vendored files are byte-identical to the
+   pinned versions — their sha384 hashes were checked against the SRI
+   constants in support.js before committing.
+
+   Note: cdnScriptFor drops the integrity attribute when an override is
+   present. That is correct here — these are same-origin files covered by
+   TLS and the deploy pipeline, not third-party ones. */
+window.__resources = {
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/vendor/react-18.3.1.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/vendor/react-dom-18.3.1.production.min.js"
+};
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -25,15 +83,13 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Outfit:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@600&amp;display=swap">
 <style>
 html,body{margin:0;padding:0}
 body{background:#F4F8FB;color:#10263B;font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 a{color:#2E6FA8;text-decoration:none}
 a:hover{color:#10263B}
-::placeholder{color:#93A7BA}
+::placeholder{color:#687784}
 @keyframes qcLaser{0%{transform:translateY(0)}50%{transform:translateY(76px)}100%{transform:translateY(0)}}
 @keyframes qcBill{0%{transform:translateY(-74px);opacity:0}22%{opacity:1;transform:translateY(-46px)}55%{transform:translateY(-10px)}75%{transform:translateY(6px) scaleY(.45);opacity:.9}92%{transform:translateY(12px) scaleY(.1);opacity:0}100%{transform:translateY(12px) scaleY(.1);opacity:0}}
 @keyframes qcCoin{0%{transform:translate(0,0) scale(.3);opacity:0}16%{transform:translate(34px,-30px) scale(1);opacity:1}55%{transform:translate(112px,-16px) scale(1);opacity:1}100%{transform:translate(158px,84px) scale(.5);opacity:0}}
@@ -89,6 +145,17 @@ a:hover{color:#10263B}
   .qc-form-row{grid-template-columns:1fr!important}
   .qc-form button[type=submit]{width:100%!important}
 }
+/* Honour prefers-reduced-motion: eight keyframe animations run on this page
+   (qcLaser, qcBill, qcCoin, qcPop, qcPulse, qcFloat, qcSkel, qcDash) plus the
+   auto-advancing hero carousel, which is paused separately in the logic. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important
+  }
+}
 @media (max-width:540px){
   .qc-app h1{font-size:clamp(27px,8.4vw,34px)!important}
   .qc-sec{padding:46px 18px!important}
@@ -102,11 +169,12 @@ a:hover{color:#10263B}
 </style>
 </helmet>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#4E9CD8"/><circle cx="60" cy="60" r="26" fill="#FFFFFF"/><text x="60" y="71" font-family="sans-serif" font-size="32" font-weight="700" fill="#F7931A" text-anchor="middle">&#8383;</text></svg></template>
+<a href="#how" style="position:absolute;left:-9999px;top:0;z-index:100;background:#10263B;color:#FFFFFF;padding:12px 20px;border-radius:0 0 10px 0;font-weight:600" style-focus="left:0">Skip to content</a>
 <div class="qc-app" style="min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden">
   <nav style="position:sticky;top:0;z-index:50;background:rgba(244,248,251,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E1EAF2">
     <div class="qc-nav" style="max-width:1180px;margin:0 auto;padding:0 28px;height:74px;display:flex;align-items:center;gap:28px">
       <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;flex-shrink:0">
-        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:30px;display:block">
+        <img src="assets/images/logo.webp" alt="QuickieCoin" style="height:30px;display:block">
       </div>
       <div class="qc-navlinks" style="display:flex;align-items:center;gap:22px;flex:1;font-size:15px;font-weight:500;color:#3D5570">
         <span onClick="{{ goHow }}" style="cursor:pointer;padding:6px 2px" style-hover="color:#2E6FA8">How it works</span>
@@ -120,7 +188,7 @@ a:hover{color:#10263B}
           <span>{{ price }}</span>
         </div>
       </sc-if>
-      <a href="tel:12014195933" style="background:#DCEBF8;color:#2E6FA8;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;flex-shrink:0" style-hover="background:#4E9CD8;color:#FFFFFF">201&#8209;419&#8209;5933</a>
+      <a href="tel:+12014195933" style="background:#DCEBF8;color:#2E6FA8;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;flex-shrink:0" style-hover="background:#4E9CD8;color:#FFFFFF">201&#8209;419&#8209;5933</a>
     </div>
   </nav>
 
@@ -155,7 +223,11 @@ a:hover{color:#10263B}
         </div>
         <div class="qc-col qc-hero-visual" style="flex:1;min-width:380px;position:relative">
           <div style="border-radius:28px;overflow:hidden;box-shadow:0 32px 64px rgba(16,38,59,.22);aspect-ratio:4/3.4;position:relative">
-            <img src="assets/images/douro.jpg" alt="Lamassu Douro bitcoin machine on a store counter" style="width:100%;height:100%;object-fit:cover;display:block">
+            <picture>
+              <source type="image/webp" sizes="(max-width:820px) 92vw, 46vw" srcset="assets/images/douro-640w.webp 640w, assets/images/douro-1040w.webp 1040w, assets/images/douro-1400w.webp 1400w">
+              <source type="image/jpeg" sizes="(max-width:820px) 92vw, 46vw" srcset="assets/images/douro-640w.jpg 640w, assets/images/douro-1040w.jpg 1040w, assets/images/douro-1400w.jpg 1400w">
+              <img src="assets/images/douro-1040w.jpg" width="1040" height="780" fetchPriority="high" decoding="async" alt="Lamassu Douro bitcoin machine on a store counter" style="width:100%;height:100%;object-fit:cover;display:block">
+            </picture>
             <div style="position:absolute;left:18px;bottom:18px;background:rgba(16,38,59,.82);backdrop-filter:blur(6px);color:#FFFFFF;border-radius:14px;padding:10px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px">
               <span style="width:7px;height:7px;border-radius:50%;background:#2BDFC5"></span>
               Lamassu machines at every location &#8212; this one&#8217;s the Douro
@@ -165,7 +237,7 @@ a:hover{color:#10263B}
             <div class="qc-price-float" style="position:absolute;top:-18px;right:-10px;background:#FFFFFF;border-radius:16px;box-shadow:0 16px 32px rgba(16,38,59,.18);padding:12px 18px;display:flex;align-items:center;gap:11px;animation:qcFloat 4s ease-in-out infinite">
               <span style="width:32px;height:32px;border-radius:50%;background:#F7931A;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:600">&#8383;</span>
               <span style="display:flex;flex-direction:column">
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;color:#93A7BA">BTC &#183; LIVE</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;color:#687784">BTC &#183; LIVE</span>
                 <span style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;color:#10263B">{{ price }}</span>
               </span>
             </div>
@@ -188,7 +260,7 @@ a:hover{color:#10263B}
         <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 8px;line-height:1.1">Cash to bitcoin in under a minute.</h2>
         <p style="color:rgba(255,255,255,.85);font-size:17px;margin:0 0 54px;max-width:560px;line-height:1.6">Three steps on the machine. First time? The screen walks you through it &#8212; or call and a human picks up.</p>
         <div class="qc-how-cols" style="display:flex;gap:56px;align-items:center;flex-wrap:wrap">
-          <div class="qc-col qc-how-visual" style="flex:1.05;min-width:420px;display:flex;flex-direction:column;align-items:center;gap:22px">
+          <div class="qc-col qc-how-visual" onMouseEnter="{{ holdCarousel }}" onMouseLeave="{{ releaseCarousel }}" onFocus="{{ holdCarousel }}" onBlur="{{ releaseCarousel }}" style="flex:1.05;min-width:420px;display:flex;flex-direction:column;align-items:center;gap:22px">
             <div class="qc-mockup" style="position:relative;width:520px;height:430px;max-width:100%">
               <div style="position:absolute;left:36px;top:6px;width:296px;height:396px;background:#FFFFFF;border-radius:26px;box-shadow:0 28px 56px rgba(9,38,66,.32)">
                 <div style="position:absolute;left:24px;top:24px;width:248px;height:156px;background:#0E2A47;border-radius:14px;padding:8px;box-sizing:border-box">
@@ -293,7 +365,7 @@ a:hover{color:#10263B}
                 <span style="font-size:15px;line-height:1.55;opacity:.82">Confirm, and your bitcoin is on its way before you leave the store.</span>
               </span>
             </div>
-            <p style="color:rgba(255,255,255,.75);font-size:13.5px;margin:8px 0 0;line-height:1.6">No account needed. Verification starts with just your phone number; ID only kicks in at higher amounts.</p>
+            <p style="color:rgba(255,255,255,.75);font-size:13.5px;margin:8px 0 0;line-height:1.6">No account, no bank. Verification is quick and scales with the amount you&#8217;re buying.</p>
           </div>
         </div>
       </div>
@@ -332,17 +404,17 @@ a:hover{color:#10263B}
             <sc-if value="{{ snapshotMode }}" hint-placeholder-val="{{ false }}">
               <div style="grid-column:1/-1;background:#FFF9EC;border:1px solid #F0E2C0;border-radius:14px;padding:13px 18px;font-size:13.5px;line-height:1.55;color:#7A6127;display:flex;gap:10px;align-items:flex-start">
                 <span style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:#D9A741;margin-top:5px"></span>
-                <span><strong>Snapshot data</strong> &#8212; the live directory can&#8217;t be reached from this preview (Sanity only allows approved domains; add the Netlify domain to the CORS allowlist at manage.sanity.io). Positions and details here are approximate; the deployed site shows the real CMS feed.</span>
+                <span><strong>These locations may be out of date.</strong> We can&#8217;t reach our live machine directory right now, so hours and availability below might have changed. Please call <a href="tel:+12014195933" style="color:#7A6127;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a> before you travel and we&#8217;ll confirm the nearest working machine.</span>
               </div>
             </sc-if>
             <sc-for list="{{ locs }}" as="l" hint-placeholder-count="0">
               <div style="{{ l.wrapStyle }}">
                 <div style="height:190px;position:relative;background:#E9F1F8">
                   <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
-                    <div style="{{ l.imgStyle }}"></div>
+                    <img src="{{ l.img }}" alt="{{ l.imgAlt }}" loading="lazy" decoding="async" width="320" height="170" style="position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);object-fit:contain;display:block">
                   </sc-if>
                   <sc-if value="{{ l.noImg }}" hint-placeholder-val="{{ true }}">
-                    <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#93A7BA">STOREFRONT PHOTO</span>
+                    <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#687784">STOREFRONT PHOTO</span>
                   </sc-if>
                   <span style="{{ l.badgeStyle }}">{{ l.badgeText }}</span>
                   <sc-if value="{{ l.sellsToo }}" hint-placeholder-val="{{ false }}">
@@ -359,7 +431,17 @@ a:hover{color:#10263B}
                       </sc-for>
                     </div>
                   </sc-if>
-                  <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="margin-top:auto;font-weight:600;font-size:14px;color:#2E6FA8">Directions &#8599;</a>
+                  <sc-if value="{{ l.isOpen }}" hint-placeholder-val="{{ true }}">
+                    <span style="margin-top:auto;display:flex;gap:16px;flex-wrap:wrap;font-weight:600;font-size:14px">
+                      <a href="{{ l.dir }}" target="_blank" rel="noreferrer" style="color:#2E6FA8">Directions &#8599;</a>
+                      <sc-if value="{{ l.hasRadar }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ l.radar }}" target="_blank" rel="noopener noreferrer" style="color:#2E6FA8">Live rate &amp; fees &#8599;</a>
+                      </sc-if>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ l.isClosed }}" hint-placeholder-val="{{ false }}">
+                    <span style="margin-top:auto;font-size:13.5px;line-height:1.5;color:#687788">This machine is temporarily out of service. Call <a href="tel:+12014195933" style="font-weight:600;color:#2E6FA8">201&#8209;419&#8209;5933</a> and we&#8217;ll point you at the nearest working one.</span>
+                  </sc-if>
                 </div>
               </div>
             </sc-for>
@@ -417,7 +499,7 @@ a:hover{color:#10263B}
           <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#FFFFFF;margin:12px 0 14px;line-height:1.1">Talk to a human.</h2>
           <p style="color:#B8CCDE;font-size:17px;line-height:1.65;margin:0 0 36px;max-width:440px">Questions about a transaction, your first buy, or hosting a machine in your store &#8212; we answer.</p>
           <div style="display:flex;flex-direction:column;gap:18px">
-            <a href="tel:12014195933" style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:28px;color:#FFFFFF" style-hover="color:#8FC1E8">201&#8209;419&#8209;5933</a>
+            <a href="tel:+12014195933" style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:28px;color:#FFFFFF" style-hover="color:#8FC1E8">201&#8209;419&#8209;5933</a>
             <a href="mailto:team@quickiecoin.com" style="font-size:17px;color:#8FC1E8;font-weight:500" style-hover="color:#FFFFFF">team@quickiecoin.com</a>
             <div style="display:flex;gap:18px;font-size:15px;font-weight:500">
               <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#B8CCDE" style-hover="color:#FFFFFF">Instagram &#8599;</a>
@@ -444,6 +526,11 @@ a:hover{color:#10263B}
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Message
               <textarea name="message" rows="5" required="required" placeholder="How can we help?" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical" style-focus="border-color:#4E9CD8"></textarea>
             </label>
+            <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FDECEC;border:1px solid #F3C9C9;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.6;color:#8A2B2B">
+                That didn&#8217;t send &#8212; your message is still here, so you can try again. If it keeps failing, email <a href="mailto:team@quickiecoin.com" style="color:#8A2B2B;font-weight:600;text-decoration:underline">team@quickiecoin.com</a> or call <a href="tel:+12014195933" style="color:#8A2B2B;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a>.
+              </div>
+            </sc-if>
             <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Send message</button>
           </form>
         </sc-if>
@@ -451,7 +538,7 @@ a:hover{color:#10263B}
           <div style="background:#FFFFFF;border-radius:22px;padding:48px 34px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 28px 56px rgba(0,0,0,.28)">
             <div style="width:56px;height:56px;border-radius:50%;background:#E3F4EA;color:#1F7A4D;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;animation:qcPop .5s ease-out both">&#10003;</div>
             <p style="font-family:'Fredoka',sans-serif;font-size:23px;font-weight:500;color:#10263B;margin:0">Got it &#8212; we&#8217;ll get back to you shortly.</p>
-            <p style="color:#4A6076;font-size:15px;margin:0">Usually same day. In a hurry? <a href="tel:12014195933" style="font-weight:600">Call us.</a></p>
+            <p style="color:#4A6076;font-size:15px;margin:0">Usually same day. In a hurry? <a href="tel:+12014195933" style="font-weight:600">Call us.</a></p>
             <span onClick="{{ resetContact }}" style="color:#2E6FA8;font-weight:600;font-size:14px;cursor:pointer;margin-top:6px">Send another message</span>
           </div>
         </sc-if>
@@ -515,7 +602,7 @@ a:hover{color:#10263B}
           <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:42px;color:#FFFFFF;margin:0 0 14px;line-height:1.12">Start the conversation.</h2>
           <p style="color:rgba(255,255,255,.88);font-size:17px;line-height:1.65;margin:0 0 26px;max-width:460px">Tell us who you are and roughly what you&#8217;re looking to buy. A real person replies with next steps &#8212; usually the same day.</p>
           <div style="display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,.92);font-size:15px;font-weight:500">
-            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="width:7px;height:7px;border-radius:50%;background:#FFFFFF"></span>Prefer to talk first? <a href="tel:+12014195933" style="color:#FFFFFF;text-decoration:underline">201&#8209;419&#8209;5933</a></span>
           </div>
         </div>
         <sc-if value="{{ wireNotSent }}" hint-placeholder-val="{{ true }}">
@@ -530,20 +617,27 @@ a:hover{color:#10263B}
                 <input name="email" type="email" required="required" placeholder="satoshi@nakamoto.com" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
               </label>
             </div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Phone <span style="font-weight:400;color:#687784">(optional)</span>
+              <input name="phone" type="tel" autoComplete="tel" placeholder="201-555-0142" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+            </label>
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Approximate amount
               <select name="amount" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;appearance:auto" style-focus="border-color:#4E9CD8">
-                <option>Under $10,000</option>
                 <option>$10,000 &#8211; $50,000</option>
                 <option>$50,000 &#8211; $250,000</option>
                 <option>$250,000+</option>
                 <option>Not sure yet</option>
               </select>
             </label>
-            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Anything else? <span style="font-weight:400;color:#93A7BA">(optional)</span>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Anything else? <span style="font-weight:400;color:#687784">(optional)</span>
               <textarea name="note" rows="3" placeholder="Timing, questions, how you found us&#8230;" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;resize:vertical"></textarea>
             </label>
+            <sc-if value="{{ wireError }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#FDECEC;border:1px solid #F3C9C9;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.6;color:#8A2B2B">
+                That didn&#8217;t send &#8212; your details are still here, so you can try again. If it keeps failing, email <a href="mailto:team@quickiecoin.com" style="color:#8A2B2B;font-weight:600;text-decoration:underline">team@quickiecoin.com</a> or call <a href="tel:+12014195933" style="color:#8A2B2B;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a>.
+              </div>
+            </sc-if>
             <button type="submit" style="background:#4E9CD8;color:#FFFFFF;border:none;border-radius:999px;padding:15px 28px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16.5px;cursor:pointer" style-hover="background:#2E6FA8">Request wire details</button>
-            <span style="font-size:12.5px;color:#93A7BA;text-align:center">No obligation &#8212; this just starts an email thread with us.</span>
+            <span style="font-size:12.5px;color:#687784;text-align:center">No obligation &#8212; this just starts an email thread with us.</span>
           </form>
         </sc-if>
         <sc-if value="{{ wireSent }}" hint-placeholder-val="{{ false }}">
@@ -562,12 +656,13 @@ a:hover{color:#10263B}
   <footer style="background:#0B2036;margin-top:auto">
     <div style="max-width:1180px;margin:0 auto;padding:40px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;gap:10px">
-        <img src="assets/images/logo.png" alt="QuickieCoin" style="height:24px;display:block;filter:brightness(0) invert(1);opacity:.9;align-self:flex-start">
-        <span style="color:#6E88A3;font-size:13px;max-width:480px;line-height:1.6">&#169; 2026 QuickieCoin NJ LLC &#183; A FinCEN&#8209;registered money services business. Buy bitcoin for cash at our machines across Hudson County, New Jersey.</span>
+        <img src="assets/images/logo.webp" alt="QuickieCoin" style="height:24px;display:block;filter:brightness(0) invert(1);opacity:.9;align-self:flex-start">
+        <span style="color:#6F89A4;font-size:13px;max-width:480px;line-height:1.6">&#169; 2026 QuickieCoin NJ LLC &#183; A FinCEN&#8209;registered money services business. Buy bitcoin for cash at our machines across Hudson County, New Jersey.</span>
       </div>
       <div style="display:flex;gap:22px;font-size:14px;font-weight:500;flex-wrap:wrap">
-        <a href="#privacy" style="color:#9FB4C9" style-hover="color:#FFFFFF">Privacy</a>
-        <a href="#terms" style="color:#9FB4C9" style-hover="color:#FFFFFF">Terms</a>
+        <a href="/privacy/" style="color:#9FB4C9" style-hover="color:#FFFFFF">Privacy</a>
+        <a href="/terms/" style="color:#9FB4C9" style-hover="color:#FFFFFF">Terms</a>
+        <a href="/hosting/" style="color:#9FB4C9" style-hover="color:#FFFFFF">Hosting</a>
         <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#9FB4C9" style-hover="color:#FFFFFF">Instagram</a>
         <a href="https://twitter.com/quickiecoin" target="_blank" rel="noreferrer" style="color:#9FB4C9" style-hover="color:#FFFFFF">Twitter</a>
         <a href="mailto:team@quickiecoin.com" style="color:#9FB4C9" style-hover="color:#FFFFFF">team@quickiecoin.com</a>
@@ -586,37 +681,199 @@ a:hover{color:#10263B}
   &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
 }">
 class Component extends DCLogic {
-  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, openFaq: 0 };
+  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
 
   static SNAPSHOT = [
-    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7699, long: -74.025, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400' },
-    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029', lat: 40.7405, long: -74.1553, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400' },
-    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7523, long: -74.053, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400' },
-    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.7484, long: -74.0492, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400' },
-    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.7118, long: -74.087, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400' },
-    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7345, long: -74.0665, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400' },
-    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002', lat: 40.6748, long: -74.1069, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400' }
+    { _id: 'snap1', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400&auto=format' },
+    { _id: 'snap2', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400&auto=format' },
+    { _id: 'snap3', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400&auto=format' },
+    { _id: 'snap4', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400&auto=format' },
+    { _id: 'snap5', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400&auto=format' },
+    { _id: 'snap6', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400&auto=format' },
+    { _id: 'snap7', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400&auto=format' }
   ];
 
   componentDidMount() {
     const q = encodeURIComponent('{"machines": *[_type == "machine"], "faqs": *[_type == "faqs"]}');
     fetch('https://dkkl7znc.apicdn.sanity.io/v2021-10-21/data/query/production?query=' + q)
       .then(r => r.json())
-      .then(d => { const res = (d && d.result) || {}; this.setState({ locations: res.machines || [], faqs: res.faqs || [] }); })
-      .catch(() => this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }));
+      .then(d => { const res = (d && d.result) || {}; const ms = res.machines || []; this.setState({ locations: ms, faqs: res.faqs || [] }); this.injectLocationSchema(ms); })
+      .catch(() => { this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }); this.injectLocationSchema(Component.SNAPSHOT); });
     fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot')
       .then(r => r.json())
       .then(d => { const n = parseFloat(d && d.data && d.data.amount); if (n) this.setState({ price: '$' + Math.round(n).toLocaleString('en-US') }); })
       .catch(() => {});
+    this._reduceMotion = typeof matchMedia === 'function'
+      && matchMedia('(prefers-reduced-motion: reduce)').matches;
     this._stepTimer = setInterval(() => {
-      if (this.props.autoPlayDemo ?? true) this.setState(s => ({ step: (s.step + 1) % 3 }));
+      if (!(this.props.autoPlayDemo ?? true)) return;
+      // Don't advance for someone who asked for reduced motion, while the tab
+      // is in the background, or while the carousel is being read or hovered.
+      if (this._reduceMotion || document.hidden || this._carouselHold) return;
+      this.setState(s => ({ step: (s.step + 1) % 3 }));
     }, 3800);
-    this._mapTimer = setInterval(() => this.ensureMap(), 450);
+    this.watchMap();
+  }
+
+  componentDidUpdate() {
+    // The map node is created and destroyed as the view changes, so re-arm the
+    // observer whenever a different #qc-map appears. Cheap, and only on state
+    // changes — the old code polled getElementById every 450ms forever.
+    this.watchMap();
   }
 
   componentWillUnmount() {
-    clearInterval(this._stepTimer); clearInterval(this._mapTimer);
+    clearInterval(this._stepTimer);
+    if (this._io) { this._io.disconnect(); this._io = null; }
     if (this._map) { try { this._map.remove(); } catch (e) {} }
+  }
+
+  // ---- map loading -----------------------------------------------------
+  // Leaflet (147 KB) and its tile requests are for a map below the fold, so
+  // neither is fetched until the map is close to the viewport.
+
+  watchMap() {
+    const el = document.getElementById('qc-map');
+    if (!el) {
+      if (this._io) { this._io.disconnect(); this._io = null; }
+      this._watched = null;
+      if (this._map) { try { this._map.remove(); } catch (e) {} this._map = null; this._mapEl = null; }
+      return;
+    }
+    if (this._watched === el) { if (window.L && this._mapEl !== el) this.ensureMap(); return; }
+    this._watched = el;
+    if (this._io) this._io.disconnect();
+    if (typeof IntersectionObserver !== 'function') { this.loadLeaflet().then(() => this.ensureMap()); return; }
+    this._io = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      if (this._io) { this._io.disconnect(); this._io = null; }
+      this.loadLeaflet().then(() => this.ensureMap()).catch(() => {});
+    }, { rootMargin: '400px 0px' });
+    this._io.observe(el);
+  }
+
+  loadLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (this._leafletPromise) return this._leafletPromise;
+    this._leafletPromise = new Promise((resolve, reject) => {
+      if (!document.getElementById('qc-leaflet-css')) {
+        const link = document.createElement('link');
+        link.id = 'qc-leaflet-css';
+        link.rel = 'stylesheet';
+        link.href = '/vendor/leaflet-1.9.4.css';
+        document.head.appendChild(link);
+      }
+      const sc = document.createElement('script');
+      sc.src = '/vendor/leaflet-1.9.4.js';
+      sc.async = true;
+      sc.onload = () => resolve();
+      sc.onerror = () => reject(new Error('leaflet failed to load'));
+      document.head.appendChild(sc);
+    });
+    return this._leafletPromise;
+  }
+
+  // ---- structured data -------------------------------------------------
+  // One LocalBusiness per machine, injected once the CMS query resolves.
+  // Built from the live records rather than a hard-coded list, so it cannot
+  // drift the way the snapshot fallback did.
+
+  parseAddress(addr) {
+    const parts = String(addr || '').split(',').map(x => x.trim()).filter(Boolean);
+    if (parts.length < 3) return null;
+    if (/^(usa|united states)$/i.test(parts[parts.length - 1])) parts.pop();
+    const tail = parts.pop() || '';
+    const m = tail.match(/^([A-Za-z]{2})\s+(\d{5}(?:-\d{4})?)$/);
+    if (!m || parts.length < 2) return null;
+    const locality = parts.pop();
+    return {
+      '@type': 'PostalAddress',
+      streetAddress: parts.join(', '),
+      addressLocality: locality,
+      addressRegion: m[1],
+      postalCode: m[2],
+      addressCountry: 'US'
+    };
+  }
+
+  parseHours(hours) {
+    const DAY = { mo: 'Mo', tu: 'Tu', we: 'We', th: 'Th', fr: 'Fr', sa: 'Sa', su: 'Su' };
+    const day = t => {
+      const k = String(t).trim().slice(0, 2).toLowerCase();
+      return DAY[k] || null;
+    };
+    const time = t => {
+      const m = String(t).trim().match(/^(\d{1,2})(?::(\d{2}))?\s*([ap])m?$/i);
+      if (!m) return null;
+      let h = parseInt(m[1], 10);
+      if (h > 12) return null;
+      const mer = m[3].toLowerCase();
+      if (mer === 'a' && h === 12) h = 0;
+      if (mer === 'p' && h !== 12) h += 12;
+      return String(h).padStart(2, '0') + ':' + (m[2] || '00');
+    };
+    const out = [];
+    (hours || []).forEach(raw => {
+      const line = String(raw).replace(/[‐-―]/g, '-').replace(/[  ]/g, ' ').trim();
+      const seg = line.match(/^(.*?):\s*(.*)$/);
+      if (!seg) return;
+      const dayPart = seg[1].trim(), timePart = seg[2].trim();
+      if (/closed/i.test(timePart)) return;
+      const t = timePart.split('-').map(x => x.trim());
+      if (t.length !== 2) return;
+      const open = time(t[0]), close = time(t[1]);
+      if (!open || !close) return;
+      let days;
+      if (/every\s*day|daily|^all/i.test(dayPart)) days = 'Mo-Su';
+      else if (dayPart.includes('-')) {
+        const d = dayPart.split('-').map(x => day(x));
+        if (!d[0] || !d[1]) return;
+        days = (d[0] === 'Su' && d[1] === 'Sa') ? 'Mo-Su' : d[0] + '-' + d[1];
+      } else {
+        const d = day(dayPart);
+        if (!d) return;
+        days = d;
+      }
+      out.push(days + ' ' + open + '-' + close);
+    });
+    return out;
+  }
+
+  injectLocationSchema(machines) {
+    try {
+      if (!Array.isArray(machines) || !machines.length) return;
+      const items = machines.map(m => {
+        const name = m.location || m.name;
+        if (!name) return null;
+        const node = {
+          '@type': 'LocalBusiness',
+          '@id': 'https://quickiecoin.com/#machine-' + String(m._id || name).replace(/[^A-Za-z0-9_-]/g, ''),
+          name: 'QuickieCoin Bitcoin ATM - ' + name,
+          description: 'Buy bitcoin for cash at a QuickieCoin machine inside ' + name + '.',
+          telephone: '+1-201-419-5933',
+          url: 'https://quickiecoin.com/#locations',
+          parentOrganization: { '@id': 'https://quickiecoin.com/#organization' },
+          currenciesAccepted: 'USD',
+          paymentAccepted: 'Cash'
+        };
+        const addr = this.parseAddress(m.address);
+        if (addr) node.address = addr;
+        if (typeof m.lat === 'number' && typeof m.long === 'number') {
+          node.geo = { '@type': 'GeoCoordinates', latitude: m.lat, longitude: m.long };
+        }
+        const hrs = this.parseHours(m.hours);
+        if (hrs.length) node.openingHours = hrs;
+        return node;
+      }).filter(Boolean);
+      if (!items.length) return;
+      const prev = document.getElementById('qc-locations-ld');
+      if (prev) prev.remove();
+      const el = document.createElement('script');
+      el.type = 'application/ld+json';
+      el.id = 'qc-locations-ld';
+      el.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': items });
+      document.head.appendChild(el);
+    } catch (e) { /* structured data is best-effort; never break hydration */ }
   }
 
   ensureMap() {
@@ -646,7 +903,7 @@ class Component extends DCLogic {
       className: '',
       html: '<div style="position:relative;width:40px;height:50px;filter:drop-shadow(0 3px 6px rgba(16,38,59,.4))">'
         + '<div style="position:absolute;left:50%;margin-left:-8px;top:34px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:14px solid #FFFFFF"></div>'
-        + '<div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><img src="assets/images/qpin.png" style="width:30px;height:30px;object-fit:contain;display:block"></div>'
+        + '<div style="position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><img src="assets/images/qpin.png" alt="" style="width:30px;height:30px;object-fit:contain;display:block"></div>'
         + '</div>',
       iconSize: [40, 50], iconAnchor: [20, 50], popupAnchor: [0, -46]
     });
@@ -660,13 +917,21 @@ class Component extends DCLogic {
     this._map = m; this._mapEl = el;
   }
 
-  submitNetlifyForm(e, sentKey) {
+  submitNetlifyForm(e, sentKey, errKey) {
     e.preventDefault();
     const form = e.target;
     const body = new URLSearchParams(new FormData(form)).toString();
+    this.setState({ [errKey]: false });
     fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
-      .then(() => { form.reset(); this.setState({ [sentKey]: true }); })
-      .catch(() => this.setState({ [sentKey]: true }));
+      .then(r => {
+        // A non-2xx response still resolves the promise. Without this check a
+        // Netlify outage would show the customer a "thanks" for a submission
+        // that was never captured. Only reset the form once it really landed.
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        form.reset();
+        this.setState({ [sentKey]: true });
+      })
+      .catch(() => this.setState({ [errKey]: true }));
   }
 
   go(page) { this.setState({ page }); window.scrollTo({ top: 0 }); }
@@ -685,7 +950,7 @@ class Component extends DCLogic {
   }
 
   imgUrl(t) {
-    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max'; }
+    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max&auto=format'; }
     catch (e) { return null; }
   }
 
@@ -710,7 +975,7 @@ class Component extends DCLogic {
     const st = this.state, self = this;
     const showPrice = (this.props.showBtcPrice ?? true) && !!st.price;
     const dotBase = { height: '8px', borderRadius: '5px', cursor: 'pointer', transition: 'all .3s ease', display: 'inline-block' };
-    const dot = on => ({ ...dotBase, width: on ? '26px' : '8px', background: on ? '#FFFFFF' : 'rgba(255,255,255,.45)' });
+    const dot = on => ({ ...dotBase, width: on ? '26px' : '8px', background: on ? '#FFFFFF' : 'rgba(255,255,255,.75)' });
     const cardBase = { display: 'flex', gap: '18px', padding: '22px 24px', borderRadius: '18px', cursor: 'pointer', transition: 'all .25s ease', alignItems: 'flex-start' };
     const card = on => on
       ? { ...cardBase, background: '#FFFFFF', color: '#10263B', boxShadow: '0 18px 36px rgba(9,38,66,.25)', transform: 'translateX(8px)' }
@@ -730,19 +995,22 @@ class Component extends DCLogic {
         return {
           key: l._id, name: l.location || l.name || 'QuickieCoin machine', addr: l.address || '',
           hasImg: !!img, noImg: !img,
-          imgStyle: img ? { position: 'absolute', inset: '10px', backgroundImage: 'url(' + img + ')', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : null,
+          img: img, imgAlt: 'Storefront of ' + (l.location || l.name || 'a QuickieCoin machine location'),
           hours: hours, hasHours: hours.length > 0,
           dir: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((l.location || '') + ' ' + (l.address || '')),
+          radar: typeof l.radarUrl === 'string' ? l.radarUrl.trim() : '',
+          hasRadar: typeof l.radarUrl === 'string' && l.radarUrl.trim() !== '',
           wrapStyle: { background: '#FFFFFF', border: '1px solid #E1EAF2', borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: l.open ? 1 : 0.55, boxShadow: '0 10px 24px rgba(16,38,59,.06)' },
-          badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#6B7B8C' },
-          badgeText: l.open ? '● Live' : 'Offline',
+          isOpen: !!l.open, isClosed: !l.open,
+          badgeStyle: l.open ? { ...badgeBase, background: '#E3F4EA', color: '#1F7A4D' } : { ...badgeBase, background: '#EDF1F5', color: '#687788' },
+          badgeText: l.open ? '● Live' : 'Temporarily unavailable',
           sellsToo: /bayonne/i.test(l.address || '')
         };
       });
 
     const fallbackFaqs = [
       { question: 'Do I need an account?', answer: 'No account with us — ever. All you need is a bitcoin wallet app on your phone (any one you like) and cash.' },
-      { question: 'What do I need to bring?', answer: 'Cash and your phone. Verification starts with just a phone number at the machine; ID only comes into play at higher amounts.' },
+      { question: 'What do I need to bring?', answer: 'Cash and your phone, with a bitcoin wallet app on it. Verification is quick and scales with the amount you are buying.' },
       { question: 'How fast do I get my bitcoin?', answer: 'It is sent the moment you confirm on the machine — you will usually see it arrive in your wallet before you are out the door.' },
       { question: 'Can I sell bitcoin for cash?', answer: 'Yes — cash-out is available at our Teamwork Wireless machine in Bayonne. Call ahead for larger amounts and we will make sure the cash is there.' },
       { question: 'What are the limits?', answer: 'Higher than you might expect — limits depend on your verification level, and the machines comfortably handle larger buys. Moving serious size? Our **wire desk** handles that — same people, better rate.' }
@@ -768,6 +1036,8 @@ class Component extends DCLogic {
       s0: st.step === 0, s1: st.step === 1, s2: st.step === 2,
       stepCaption: ['SCANNING WALLET…', 'COUNTING CASH…', 'BITCOIN SENT ✓'][st.step],
       goStep0: () => this.setState({ step: 0 }), goStep1: () => this.setState({ step: 1 }), goStep2: () => this.setState({ step: 2 }),
+      holdCarousel: () => { this._carouselHold = true; },
+      releaseCarousel: () => { this._carouselHold = false; },
       dot0: dot(st.step === 0), dot1: dot(st.step === 1), dot2: dot(st.step === 2),
       card0: card(st.step === 0), card1: card(st.step === 1), card2: card(st.step === 2),
       num0: num(st.step === 0), num1: num(st.step === 1), num2: num(st.step === 2),
@@ -776,10 +1046,12 @@ class Component extends DCLogic {
       openCount: raw.filter(l => l.open).length,
       faqList: faqList,
       contactSent: st.contactSent, contactNotSent: !st.contactSent,
-      submitContact: e => this.submitNetlifyForm(e, 'contactSent'),
+      contactError: st.contactError,
+      submitContact: e => this.submitNetlifyForm(e, 'contactSent', 'contactError'),
       resetContact: () => this.setState({ contactSent: false }),
       wireSent: st.wireSent, wireNotSent: !st.wireSent,
-      submitWire: e => this.submitNetlifyForm(e, 'wireSent'),
+      wireError: st.wireError,
+      submitWire: e => this.submitNetlifyForm(e, 'wireSent', 'wireError'),
       resetWire: () => this.setState({ wireSent: false })
     };
   }

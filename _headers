@@ -1,0 +1,36 @@
+# Netlify serves every first-party asset as `public, max-age=0, must-revalidate`
+# by default, because the filenames are not fingerprinted. ETags mean repeat
+# visitors get 304s rather than re-downloads, so the cost is a conditional
+# round trip per asset per visit — about ten of them, which is noticeable on
+# mobile.
+#
+# NOTE ON `immutable`: these filenames are NOT content-hashed. `immutable` with
+# a one-year max-age would make a stale asset unfixable without renaming the
+# file, so the asset directories get one week instead. /vendor/ IS effectively
+# immutable — every file there carries its exact upstream version in the name
+# (react-18.3.1..., leaflet-1.9.4...) and a version bump changes the filename —
+# so it gets the full year.
+#
+# HTML stays uncached so content and CMS-driven markup update immediately.
+# Netlify already sets HSTS.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
+  X-Frame-Options: SAMEORIGIN
+
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+/static/*
+  Cache-Control: public, max-age=604800
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
