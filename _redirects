@@ -13,5 +13,5 @@
 /locations     /#locations   301
 /faqs/*        /#faqs        301
 /faqs          /#faqs        301
-/wires/*       /             301
-/wires         /             301
+/wires/*       /#wires       301
+/wires         /#wires       301
