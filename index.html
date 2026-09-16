@@ -95,6 +95,7 @@ window.__resources = {
 <script src="https://www.google.com/recaptcha/api.js?render=explicit&amp;onload=qcCaptchaReady" async defer></script>
 <script src="./support.js"></script>
 <script defer src="./hash-scroll.js"></script>
+<script defer src="./phone-format.js"></script>
 </head>
 <body>
 <x-dc>
@@ -637,7 +638,7 @@ a:hover{color:#10263B}
               </label>
             </div>
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Phone <span style="font-weight:400;color:#687784">(optional)</span>
-              <input name="phone" type="tel" autoComplete="tel" placeholder="201-555-0142" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
+              <input name="phone" type="tel" autoComplete="tel" placeholder="(201) 555-0142" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box" style-focus="border-color:#4E9CD8">
             </label>
             <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Approximate amount
               <select name="amount" style="border:1.5px solid #D6E2ED;border-radius:12px;padding:13px 15px;font-family:'Outfit',sans-serif;font-size:15px;color:#10263B;outline:none;background:#FBFDFE;min-width:0;width:100%;box-sizing:border-box;appearance:auto" style-focus="border-color:#4E9CD8">
