@@ -531,7 +531,7 @@ a:hover{color:#10263B}
         </div>
         <sc-if value="{{ contactNotSent }}" hint-placeholder-val="{{ true }}">
           <form class="qc-form" name="contact-form" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" data-netlify-recaptcha="true" onSubmit="{{ submitContact }}" style="background:#FFFFFF;border-radius:22px;padding:34px;display:flex;flex-direction:column;gap:18px;box-shadow:0 28px 56px rgba(0,0,0,.28)">
-            <input type="hidden" name="form-name" value="contact-form">
+            <input type="hidden" name="form-name" value="contact-form"><input type="hidden" name="subject" value="QuickieCoin contact form: new message (%{submissionId})">
             <p style="display:none"><label>Don&#8217;t fill this out if you&#8217;re human: <input name="bot-field"></label></p>
             <div class="qc-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Name
@@ -626,7 +626,7 @@ a:hover{color:#10263B}
         </div>
         <sc-if value="{{ wireNotSent }}" hint-placeholder-val="{{ true }}">
           <form class="qc-form" name="wire-form" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" data-netlify-recaptcha="true" onSubmit="{{ submitWire }}" style="background:#FFFFFF;border-radius:22px;padding:34px;display:flex;flex-direction:column;gap:18px;box-shadow:0 28px 56px rgba(9,38,66,.3)">
-            <input type="hidden" name="form-name" value="wire-form">
+            <input type="hidden" name="form-name" value="wire-form"><input type="hidden" name="subject" value="QuickieCoin WIRE DESK: new inquiry (%{submissionId})">
             <p style="display:none"><label>Don&#8217;t fill this out if you&#8217;re human: <input name="bot-field"></label></p>
             <div class="qc-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:600;color:#3D5570;min-width:0">Name
