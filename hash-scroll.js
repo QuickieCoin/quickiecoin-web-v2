@@ -25,8 +25,8 @@
   var FIND_TIMEOUT = 3000;
 
   // One scroll is not enough. Between first paint and a settled layout the page
-  // grows: web fonts swap in, the hero photo and the three how-it-works GIFs
-  // decode, and the Sanity fetch fills in the machine list. Each of those moves
+  // grows: web fonts swap in, and the hero photo, the three how-it-works GIFs
+  // and the location photos decode. Each of those moves
   // every section below it, so a single jump lands in the wrong place. We
   // re-aim at these points, and only if the section has actually moved.
   var RECHECK_AT = [400, 1200];
