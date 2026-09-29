@@ -24,8 +24,6 @@
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
 <meta name="theme-color" content="#F4F8FB">
-<link rel="preconnect" href="https://dkkl7znc.apicdn.sanity.io" crossorigin="anonymous">
-<link rel="preconnect" href="https://cdn.sanity.io" crossorigin="anonymous">
 <link rel="preconnect" href="https://api.coinbase.com" crossorigin="anonymous">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://quickiecoin.com/">
@@ -403,7 +401,7 @@ a:hover{color:#10263B}
               <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2E6FA8">Locations</span>
             </div>
             <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:44px;color:#10263B;margin:12px 0 8px;line-height:1.1">Find your machine.</h2>
-            <p style="color:#4A6076;font-size:17px;margin:0;max-width:540px;line-height:1.6">Every location below is pulled live from our machine directory &#8212; status, hours and all.</p>
+            <p style="color:#4A6076;font-size:17px;margin:0;max-width:540px;line-height:1.6">Every QuickieCoin machine in one place &#8212; address, hours and all.</p>
           </div>
           <sc-if value="{{ locsReady }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;align-items:center;gap:8px;background:#E3F4EA;border-radius:999px;padding:9px 18px;font-size:13.5px;font-weight:600;color:#1F7A4D">
@@ -414,18 +412,6 @@ a:hover{color:#10263B}
         </div>
         <div class="qc-loc-grid" style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:28px;align-items:start">
           <div class="qc-loc-cards" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-            <sc-if value="{{ locsLoading }}" hint-placeholder-val="{{ true }}">
-              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite"></div>
-              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .2s"></div>
-              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .4s"></div>
-              <div style="height:220px;border-radius:20px;background:#E4EBF2;animation:qcSkel 1.6s ease-in-out infinite .6s"></div>
-            </sc-if>
-            <sc-if value="{{ snapshotMode }}" hint-placeholder-val="{{ false }}">
-              <div style="grid-column:1/-1;background:#FFF9EC;border:1px solid #F0E2C0;border-radius:14px;padding:13px 18px;font-size:13.5px;line-height:1.55;color:#7A6127;display:flex;gap:10px;align-items:flex-start">
-                <span style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:#D9A741;margin-top:5px"></span>
-                <span><strong>These locations may be out of date.</strong> We can&#8217;t reach our live machine directory right now, so hours and availability below might have changed. Please call <a href="tel:+12014195933" style="color:#7A6127;font-weight:600;text-decoration:underline">201&#8209;419&#8209;5933</a> before you travel and we&#8217;ll confirm the nearest working machine.</span>
-              </div>
-            </sc-if>
             <sc-for list="{{ locs }}" as="l" hint-placeholder-count="0">
               <div style="{{ l.wrapStyle }}">
                 <div style="height:190px;position:relative;background:#E9F1F8">
@@ -702,16 +688,151 @@ a:hover{color:#10263B}
   &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
 }">
 class Component extends DCLogic {
-  state = { page: 'home', step: 0, locations: null, snapshotMode: false, faqs: null, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
+  state = { page: 'home', step: 0, locations: Component.MACHINES, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
 
-  static SNAPSHOT = [
-    { _id: 'snap1', radarUrl: 'https://coinatmradar.com/bitcoin_atm/103781/bitcoin-atm-lamassu-north-bergen-wine-spot/', location: 'Wine Spot - North Bergen', address: '2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047', lat: 40.7697654, long: -74.0387147, open: true, snapshot: true, hours: ['Mon \u2013 Thu: 10am \u2013 9:30pm', 'Fri \u2013 Sat: 10am \u2013 10pm', 'Sun: 12pm \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/b9c15533c8bfd95ccd9ac414d845b0eabbb0c204-1326x1614.png?h=400&auto=format' },
-    { _id: 'snap2', radarUrl: 'https://coinatmradar.com/bitcoin_atm/111506/bitcoin-atm-lamassu-harrison-cork-wine-spirits/', location: 'Cork Wine & Spirits', address: '803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States', lat: 40.7399926, long: -74.1567107, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 9pm', 'Sun: 12pm \u2013 8pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/d8247e34c1c3e290c0f2a80145b3c9ab186ab67d-1438x1856.png?h=400&auto=format' },
-    { _id: 'snap3', radarUrl: 'https://coinatmradar.com/bitcoin_atm/111507/bitcoin-atm-lamassu-jersey-city-signature-smoke-shop/', location: 'Signature Smoke Shop', address: '3719 John F. Kennedy Blvd, Jersey City, NJ 07307', lat: 40.7569377, long: -74.0462583, open: true, snapshot: true, hours: ['Every day: 10am \u2013 12am'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/358ca20dff57ae8296f7c5ca0509b2fdf7866e20-580x536.png?h=400&auto=format' },
-    { _id: 'snap4', radarUrl: 'https://coinatmradar.com/bitcoin_atm/94712/bitcoin-atm-lamassu-bayonne-zuys-smoke-shop/', location: 'Zuys Smoke Shop', address: '396 Central Ave, Jersey City, NJ 07307', lat: 40.74822, long: -74.04747, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 9am \u2013 11pm', 'Sun: 9am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/49981b1f79cca176c983bad265abe519991225e7-4284x5712.jpg?h=400&auto=format' },
-    { _id: 'snap5', radarUrl: 'https://coinatmradar.com/bitcoin_atm/26233/bitcoin-atm-lamassu-jersey-city-cell-2-go/', location: 'Cell2Go', address: '462 West Side Ave, Jersey City, NJ 07304', lat: 40.71677, long: -74.0849, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 6pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/9264d43c1c6117870d30b4bdcfd64d1662a399bb-762x936.png?h=400&auto=format' },
-    { _id: 'snap6', radarUrl: 'https://coinatmradar.com/bitcoin_atm/78175/bitcoin-atm-lamassu-jersey-city-state-news/', location: 'State News', address: '2984 John F. Kennedy Blvd, Jersey City, NJ 07306', lat: 40.7349958, long: -74.0612, open: true, snapshot: true, hours: ['Every day: 6am \u2013 9pm'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/f5e058f3cf9cd4ba736d504cc620a6f7b2d2f490-1402x1852.png?h=400&auto=format' },
-    { _id: 'snap7', radarUrl: 'https://coinatmradar.com/bitcoin_atm/71607/bitcoin-atm-lamassu-bayonne-teamwork-wireless/', location: 'Teamwork Wireless Store', address: '459 Broadway, Bayonne, NJ 07002, United States', lat: 40.6628351, long: -74.1195227, open: true, snapshot: true, hours: ['Mon \u2013 Sat: 10am \u2013 8pm', 'Sun: Closed'], thumbUrl: 'https://cdn.sanity.io/images/dkkl7znc/production/08b794b683615888c663527e6962ed4106fa3e77-1436x1864.png?h=400&auto=format' }
+  // ---- site content ----------------------------------------------------
+  // The machine directory and the FAQ live here, in the page (moved out of the
+  // Sanity CMS on 2026-09-29; the full export is archived in
+  // QuickieCoin/quickiecoin-api under export/). Edit them here. HTML is never
+  // cached (_headers), so a change is live for everyone as soon as it deploys.
+  //
+  // A machine: location (card title), name (short name), address (street, city,
+  // state and zip, comma-separated: the structured data parses it), hours (one
+  // line each), lat/long (map pin), open (false greys the card out as
+  // "Temporarily unavailable"), radarUrl (Coin ATM Radar), thumbUrl (a photo in
+  // /assets/images/locations/, 640px wide). _id keeps each machine's structured-
+  // data @id stable, so keep it; a new machine can use any unique string.
+  static MACHINES = [
+    {
+      _id: "7abef2ed-3c54-45a6-9ffb-daca27e875f0",
+      location: "Cell2Go", name: "Cell2Go",
+      address: "462 West Side Ave, Jersey City, NJ 07304",
+      hours: ["Monday - Saturday: 10AM–6:00PM", "Sunday: Closed"],
+      lat: 40.71677, long: -74.0849, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/26233/bitcoin-atm-lamassu-jersey-city-cell-2-go/",
+      thumbUrl: '/assets/images/locations/cell2go.webp'
+    },
+    {
+      _id: "4c4a0982-0431-4fae-ba23-068e47c0a99b",
+      location: "Cork Wine & Spirits", name: "Cork Harrison",
+      address: "803 Frank E Rodgers Blvd S, Harrison, NJ 07029, United States",
+      hours: ["Monday - Saturday: 10:00AM–9:00PM", "Sunday: 12:00PM-8:00PM"],
+      lat: 40.7399926, long: -74.1567107, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/111506/bitcoin-atm-lamassu-harrison-cork-wine-spirits/",
+      thumbUrl: '/assets/images/locations/cork-harrison.webp'
+    },
+    {
+      _id: "53f8f8ad-37d0-43b2-9cab-33ea31a9bfb1",
+      location: "Signature Smoke Shop", name: "Signature",
+      address: "3719 John F. Kennedy Blvd, Jersey City, NJ 07307",
+      hours: ["Sun - Sat: 10am - 12am"],
+      lat: 40.7569377, long: -74.0462583, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/111507/bitcoin-atm-lamassu-jersey-city-signature-smoke-shop/",
+      thumbUrl: '/assets/images/locations/signature.webp'
+    },
+    {
+      _id: "8ab38b1a-1ba3-481a-bf2e-98941f09073d",
+      location: "State News", name: "State News",
+      address: "2984 John F. Kennedy Blvd, Jersey City, NJ 07306",
+      hours: ["Every day: 6 AM–9 PM"],
+      lat: 40.7349958, long: -74.0612, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/78175/bitcoin-atm-lamassu-jersey-city-state-news/",
+      thumbUrl: '/assets/images/locations/state-news.webp'
+    },
+    {
+      _id: "968c6a14-dc02-4d21-b266-3d5dc49a282d",
+      location: "Teamwork Wireless Store", name: "Teamwork Wireless",
+      address: "459 Broadway, Bayonne, NJ 07002, United States",
+      hours: ["Monday - Saturday: 10AM–8:00PM", "Sunday: Closed"],
+      lat: 40.6628351, long: -74.1195227, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/71607/bitcoin-atm-lamassu-bayonne-teamwork-wireless/",
+      thumbUrl: '/assets/images/locations/teamwork-wireless.webp'
+    },
+    {
+      _id: "2bc9c850-d00c-4ce1-b592-e9ac0a9adf66",
+      location: "Wine Spot - North Bergen", name: "Wine Spot",
+      address: "2321 John F. Kennedy Blvd # 1, North Bergen, NJ 07047",
+      hours: ["Monday - Thursday: 10am - 9:30pm", "Friday - Saturday: 10am - 10pm", "Sunday: 12pm - 9pm"],
+      lat: 40.7697654, long: -74.0387147, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/103781/bitcoin-atm-lamassu-north-bergen-wine-spot/",
+      thumbUrl: '/assets/images/locations/wine-spot.webp'
+    },
+    {
+      _id: "66207b2d-b75c-4819-9840-51c726f682d1",
+      location: "Zuys Smoke Shop", name: "Zuy's",
+      address: "396 Central Ave, Jersey City, NJ 07307",
+      hours: ["Monday - Saturday: 9am - 11pm", "Sunday: 9am - 9pm"],
+      lat: 40.74822, long: -74.04747, open: true,
+      radarUrl: "https://coinatmradar.com/bitcoin_atm/94712/bitcoin-atm-lamassu-bayonne-zuys-smoke-shop/",
+      thumbUrl: '/assets/images/locations/zuys.webp'
+    }
+  ];
+
+  // The FAQ, in order. An answer is light markdown (md()): a blank line starts a
+  // new paragraph, **bold** is bold, and [text](https://...) is a link. A bare URL
+  // shows as plain text.
+  static FAQS = [
+    {
+      question: "What do I need before I come?",
+      answer: `A bitcoin wallet app on your phone that can display your receive address as a QR code. That is the whole prerequisite — the machine scans that code and sends your bitcoin straight to it.
+
+Bring your phone charged. You will need to open the wallet at the machine.`
+    },
+    {
+      question: "How do I get a wallet?",
+      answer: `Any bitcoin wallet works with our machines, as long as it can show a receive address as a QR code.
+
+If you do not have one yet, Bitcoin.org keeps a neutral directory you can filter by phone or platform:
+https://bitcoin.org/en/choose-your-wallet
+
+New to bitcoin entirely? Start here: https://bitcoin.org/en/getting-started
+
+QuickieCoin does not endorse, recommend or control any wallet. You hold your own keys and we never have access to them. Bitcoin sent to a wrong address cannot be recovered, so check that the QR code on your screen is yours before you confirm.`
+    },
+    {
+      question: "How long does it take?",
+      answer: `About a minute. Scan your wallet, feed in your cash, confirm the amount on screen — the bitcoin is on its way before you leave the store.`
+    },
+    {
+      question: "What ID do I need?",
+      answer: `You start with a phone number. Verification requirements increase with the size of the transaction, and the machine tells you on screen exactly what it needs before you put any cash in.
+
+If you are planning a larger purchase, bring a government-issued photo ID.`
+    },
+    {
+      question: "What are your machine limits?",
+      answer: `$25,000 per day, per customer.`
+    },
+    {
+      question: "What does it cost?",
+      answer: `Every QuickieCoin machine publishes its live buy rate and fees on Coin ATM Radar, updated in real time. That is the accurate number at the moment you are standing in front of the machine, rather than a figure printed here that goes stale.
+
+Teamwork Wireless, Bayonne — https://coinatmradar.com/bitcoin_atm/71607/
+Zuys Smoke Shop, Jersey City — https://coinatmradar.com/bitcoin_atm/94712/
+State News, Jersey City — https://coinatmradar.com/bitcoin_atm/78175/
+Cell2Go, Jersey City — https://coinatmradar.com/bitcoin_atm/26233/
+Signature Smoke Shop, Jersey City — https://coinatmradar.com/bitcoin_atm/111507/
+Cork Wine & Spirits, Harrison — https://coinatmradar.com/bitcoin_atm/111506/
+Wine Spot, North Bergen — https://coinatmradar.com/bitcoin_atm/103781/`
+    },
+    {
+      question: "What do you do with my information?",
+      answer: `QuickieCoin is a money services business registered with FinCEN. That means we are required by federal law to collect and keep certain customer information, and to report certain transactions to regulators.
+
+We do not sell your information and we do not share it for marketing. Where the law requires us to report, we report — that obligation is not something we can waive, and in some cases we are not permitted to tell you that a report was made.
+
+Beyond that, your information stays with us.`
+    },
+    {
+      question: "Can I sell bitcoin for cash?",
+      answer: `Yes, at one machine: Teamwork Wireless, 459 Broadway, Bayonne. Every other machine in the fleet is buy-only.`
+    },
+    {
+      question: "Something went wrong — who do I talk to?",
+      answer: `Call 201-419-5933 or email team@quickiecoin.com. Tell us which machine and roughly what time, and we will pull the transaction.
+
+One honest limit: once a bitcoin transaction is confirmed on the blockchain it cannot be reversed, including a send to a wrong address. If a machine took your cash and did not send, that we can fix.`
+    }
   ];
 
   componentDidMount() {
@@ -719,11 +840,7 @@ class Component extends DCLogic {
     // redirect link to /#wires, which has no route of its own — honour the
     // hash on load so those links land on the wire desk, not the top of home.
     if (typeof location !== 'undefined' && location.hash === '#wires') this.state.page = 'wires';
-    const q = encodeURIComponent('{"machines": *[_type == "machine"], "faqs": *[_type == "faqs"]}');
-    fetch('https://dkkl7znc.apicdn.sanity.io/v2021-10-21/data/query/production?query=' + q)
-      .then(r => r.json())
-      .then(d => { const res = (d && d.result) || {}; const ms = res.machines || []; this.setState({ locations: ms, faqs: res.faqs || [] }); this.injectLocationSchema(ms); })
-      .catch(() => { this.setState({ locations: Component.SNAPSHOT, snapshotMode: true }); this.injectLocationSchema(Component.SNAPSHOT); });
+    this.injectLocationSchema(Component.MACHINES);
     fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot')
       .then(r => r.json())
       .then(d => { const n = parseFloat(d && d.data && d.data.amount); if (n) this.setState({ price: '$' + Math.round(n).toLocaleString('en-US') }); })
@@ -820,9 +937,8 @@ class Component extends DCLogic {
   }
 
   // ---- structured data -------------------------------------------------
-  // One LocalBusiness per machine, injected once the CMS query resolves.
-  // Built from the live records rather than a hard-coded list, so it cannot
-  // drift the way the snapshot fallback did.
+  // One LocalBusiness per machine, built from Component.MACHINES on mount, so
+  // the structured data always matches the cards and the map.
 
   parseAddress(addr) {
     const parts = String(addr || '').split(',').map(x => x.trim()).filter(Boolean);
@@ -995,11 +1111,6 @@ class Component extends DCLogic {
     return [esri + 'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', attr, 16];
   }
 
-  imgUrl(t) {
-    try { const p = t.asset._ref.split('-'); return 'https://cdn.sanity.io/images/dkkl7znc/production/' + p[1] + '-' + p[2] + '.' + p[3] + '?w=640&fit=max&auto=format'; }
-    catch (e) { return null; }
-  }
-
   md(txt) {
     const R = React, out = [];
     String(txt || '').split(/\n{2,}/).forEach((p, i) => {
@@ -1036,7 +1147,7 @@ class Component extends DCLogic {
       .filter(l => !hideClosed || l.open)
       .sort((a, b) => (b.open === true) - (a.open === true) || String(a.location || '').localeCompare(String(b.location || '')))
       .map(l => {
-        const img = l.thumbUrl || (l.thumb ? this.imgUrl(l.thumb) : null);
+        const img = l.thumbUrl || null;
         const hours = (l.hours || []).map(h => String(h).trim()).filter(Boolean);
         return {
           key: l._id, name: l.location || l.name || 'QuickieCoin machine', addr: l.address || '',
@@ -1058,22 +1169,7 @@ class Component extends DCLogic {
         };
       });
 
-    // Rendered only when the Sanity fetch fails. Kept deliberately short and in
-    // step with the CMS FAQ rewritten 2026-09-04 - the previous version promised
-    // to have cash ready if you called ahead (an operational commitment nobody
-    // agreed to) and described limits as "higher than you might expect" rather
-    // than stating the configured cap. A fallback that contradicts the real FAQ
-    // is worse than no fallback.
-    const fallbackFaqs = [
-      { question: 'What do I need before I come?', answer: 'A bitcoin wallet app on your phone that can show your receive address as a QR code. That is the whole prerequisite.' },
-      { question: 'How long does it take?', answer: 'About a minute. Scan your wallet, feed in your cash, confirm the amount on screen - the bitcoin is on its way before you leave the store.' },
-      { question: 'What ID do I need?', answer: 'You start with a phone number. Verification requirements increase with the size of the transaction, and the machine tells you on screen exactly what it needs before you put any cash in.' },
-      { question: 'What are the limits?', answer: 'Up to $25,000 per day, per customer.' },
-      { question: 'Can I sell bitcoin for cash?', answer: 'Yes - at our Teamwork Wireless machine in Bayonne. Every other machine in the fleet is buy-only.' }
-    ];
-    const cmsItems = [];
-    (st.faqs || []).forEach(doc => (doc.faqItems || []).forEach(it => cmsItems.push(it)));
-    const items = cmsItems.length ? cmsItems : fallbackFaqs;
+    const items = Component.FAQS;
     const chevBase = { color: '#8FA5BB', fontSize: '15px', transition: 'transform .25s ease', flexShrink: 0 };
     const faqList = items.map((it, i) => ({
       key: 'f' + i, q: it.question || '', ans: self.md(it.answer),
@@ -1098,7 +1194,6 @@ class Component extends DCLogic {
       card0: card(st.step === 0), card1: card(st.step === 1), card2: card(st.step === 2),
       num0: num(st.step === 0), num1: num(st.step === 1), num2: num(st.step === 2),
       locs: locs, locsReady: Array.isArray(st.locations) && locs.length > 0,
-      locsLoading: st.locations === null, snapshotMode: st.snapshotMode,
       openCount: raw.filter(l => l.open).length,
       faqList: faqList,
       contactSent: st.contactSent, contactNotSent: !st.contactSent,
