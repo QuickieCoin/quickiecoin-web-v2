@@ -1,0 +1,28 @@
+[
+ {
+  "shape": "Catalogue",
+  "theme": "grid",
+  "axes": "light/grotesk-sans/cool",
+  "hero": "Ledge",
+  "nav": "banner over a retracting bar",
+  "footer": "statement",
+  "imagery": "photographs, owner 7, duotone",
+  "photos": [],
+  "entry": "none",
+  "fingerprint": "ledge-overprint/index-specimen/field-switcher/rows/mark-band/phone-figure",
+  "sections": [
+   "hero",
+   "index",
+   "switcher",
+   "rows",
+   "band",
+   "close",
+   "footer"
+  ],
+  "signature": "the seven stores as a poster index",
+  "waived": [],
+  "prompt": "alternative QuickieCoin site",
+  "date": "2026-10-23",
+  "mode": "build"
+ }
+]
