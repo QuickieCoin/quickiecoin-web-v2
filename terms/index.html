@@ -25,10 +25,47 @@
 <meta name="theme-color" content="#F4F8FB">
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://api.coinbase.com" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Outfit:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@600&amp;display=swap">
+<!-- Fonts are self-hosted (latin subsets, versions in the filenames) and use
+     font-display: optional. With Google Fonts' display=swap the headline and nav
+     re-flowed when Fredoka/Outfit arrived, which was the whole of the homepage's
+     layout shift (CLS 0.09 on desktop, measured 2026-10-30). optional never swaps
+     after first paint; the preload makes the real fonts arrive in time on almost
+     every visit, and they are cached for a year after that. -->
+<link rel="preload" href="/vendor/fonts/fredoka-v17-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/vendor/fonts/outfit-v15-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:300 700;font-stretch:100%;font-display:optional;src:url(/vendor/fonts/fredoka-v17-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:300 700;font-stretch:100%;font-display:optional;src:url(/vendor/fonts/fredoka-v17-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Outfit';font-style:normal;font-weight:100 900;font-display:optional;src:url(/vendor/fonts/outfit-v15-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:optional;src:url(/vendor/fonts/ibmplexmono-v20-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
 <link rel="stylesheet" href="/assets/css/pages.7d7e9032.css">
+<style>
+.crumbs{font-size:14px;color:var(--soft);margin:0 0 18px}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.crumbs li+li::before{content:"\203A";margin-right:6px;color:var(--soft)}
+.crumbs [aria-current]{color:var(--ink)}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://quickiecoin.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Terms and Conditions",
+      "item": "https://quickiecoin.com/terms/"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
@@ -38,7 +75,7 @@
     <a class="hdr-logo" href="/" aria-label="QuickieCoin home"><img src="/assets/images/logo.webp" alt="QuickieCoin" width="268" height="30"></a>
     <nav class="hdr-nav" aria-label="Main">
       <a href="/#how">How it works</a>
-      <a href="/#locations">Locations</a>
+      <a href="/locations/">Locations</a>
       <a href="/#faqs">FAQs</a>
       <a href="/#wires">Wires</a>
     </nav>
@@ -50,6 +87,7 @@
 </header>
 
 <main id="content">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Terms and Conditions</span></li></ol></nav>
   <p class="eyebrow">Legal</p>
   <h1>Terms and Conditions</h1>
   <p class="meta">Effective 3 September 2026 &#183; QuickieCoin NJ LLC</p>
@@ -115,9 +153,11 @@
       <p class="ftr-blurb">&#169; 2026 QuickieCoin NJ LLC &#183; A FinCEN&#8209;registered money services business. Buy bitcoin for cash at our machines across Hudson County, New Jersey.</p>
     </div>
     <nav class="ftr-links" aria-label="Footer">
+      <a href="/locations/">Locations</a>
+      <a href="/wallets/">Get a wallet</a>
+      <a href="/hosting/">Hosting</a>
       <a href="/privacy/">Privacy</a>
       <a href="/terms/">Terms</a>
-      <a href="/hosting/">Hosting</a>
       <a href="https://instagram.com/quickiecoin" target="_blank" rel="noreferrer">Instagram</a>
       <a href="https://twitter.com/quickiecoin" target="_blank" rel="noreferrer">Twitter</a>
       <a href="mailto:team@quickiecoin.com">team@quickiecoin.com</a>
