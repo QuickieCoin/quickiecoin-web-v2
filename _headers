@@ -22,12 +22,19 @@
 #
 # HTML stays uncached so content and CMS-driven markup update immediately.
 # Netlify already sets HSTS.
+#
+# CSP: a baseline only. The page runtime uses `new Function` and inline
+# scripts (support.js), so a script-src policy would need 'unsafe-eval' and
+# 'unsafe-inline' or a refactor. These four directives don't touch scripts:
+# no one may frame the site, no plugins, no <base> rewrite, and forms post
+# only to this origin (Netlify Forms post to "/").
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
   X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
 
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
