@@ -105,6 +105,7 @@ window.__resources = {
 </script>
 <script>window.__qcCaptchaReady=false;function qcCaptchaReady(){window.__qcCaptchaReady=true;if(window.__qcMountCaptchas)window.__qcMountCaptchas();}</script>
 <script src="https://www.google.com/recaptcha/api.js?render=explicit&amp;onload=qcCaptchaReady" async defer></script>
+<script src="./form-state.js"></script>
 <script src="./support.js"></script>
 <script defer src="./hash-scroll.js"></script>
 <script defer src="./phone-format.js"></script>
@@ -702,7 +703,9 @@ a:hover{color:#10263B}
   &quot;mapStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Clean light&quot;, &quot;options&quot;: [&quot;Clean light&quot;, &quot;Detailed streets&quot;, &quot;Dark&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Locations&quot;}
 }">
 class Component extends DCLogic {
-  state = { page: 'home', step: 0, locations: Component.MACHINES, price: null, contactSent: false, wireSent: false, contactError: false, wireError: false, openFaq: 0 };
+  state = { page: 'home', step: 0, locations: Component.MACHINES, price: null, contact: 'idle', wire: 'idle', openFaq: 0 };
+  // Each form's stage (form-state.js), kept here too so a second click in the same tick sees the first.
+  _forms = { contact: 'idle', wire: 'idle' };
 
   // ---- site content ----------------------------------------------------
   // The machine directory and the FAQ live here, in the page (moved out of the
@@ -1123,11 +1126,23 @@ One honest limit: once a bitcoin transaction is confirmed on the blockchain it c
     this._map = m; this._mapEl = el;
   }
 
-  submitNetlifyForm(e, sentKey, errKey) {
+  // The only way a form's stage changes (form-state.js: idle, submitting,
+  // sent, failed). An event that is not legal from the current stage is
+  // ignored, so a second click on Send while one POST is in flight sends
+  // nothing. Returns whether the event was taken.
+  formEvent(key, event) {
+    const next = window.QCFormState.transition(this._forms[key], event);
+    if (!next) return false;
+    this._forms[key] = next;
+    this.setState({ [key]: next });
+    return true;
+  }
+
+  submitNetlifyForm(e, key) {
     e.preventDefault();
+    if (!this.formEvent(key, 'submit')) return;
     const form = e.target;
     const body = new URLSearchParams(new FormData(form)).toString();
-    this.setState({ [errKey]: false });
     fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
       .then(r => {
         // A non-2xx response still resolves the promise. Without this check a
@@ -1135,9 +1150,9 @@ One honest limit: once a bitcoin transaction is confirmed on the blockchain it c
         // that was never captured. Only reset the form once it really landed.
         if (!r.ok) throw new Error('HTTP ' + r.status);
         form.reset();
-        this.setState({ [sentKey]: true });
+        this.formEvent(key, 'succeeded');
       })
-      .catch(() => this.setState({ [errKey]: true }));
+      .catch(() => this.formEvent(key, 'failed'));
   }
 
   go(page) { this.setState({ page }); window.scrollTo({ top: 0 }); }
@@ -1214,6 +1229,9 @@ One honest limit: once a bitcoin transaction is confirmed on the blockchain it c
         };
       });
 
+    const contact = window.QCFormState.view(st.contact);
+    const wire = window.QCFormState.view(st.wire);
+
     const items = Component.FAQS;
     const chevBase = { color: '#8FA5BB', fontSize: '15px', transition: 'transform .25s ease', flexShrink: 0 };
     const faqList = items.map((it, i) => ({
@@ -1241,14 +1259,14 @@ One honest limit: once a bitcoin transaction is confirmed on the blockchain it c
       locs: locs, locsReady: Array.isArray(st.locations) && locs.length > 0,
       openCount: raw.filter(l => l.open).length,
       faqList: faqList,
-      contactSent: st.contactSent, contactNotSent: !st.contactSent,
-      contactError: st.contactError,
-      submitContact: e => this.submitNetlifyForm(e, 'contactSent', 'contactError'),
-      resetContact: () => this.setState({ contactSent: false }),
-      wireSent: st.wireSent, wireNotSent: !st.wireSent,
-      wireError: st.wireError,
-      submitWire: e => this.submitNetlifyForm(e, 'wireSent', 'wireError'),
-      resetWire: () => this.setState({ wireSent: false })
+      contactSent: contact.sent, contactNotSent: contact.notSent,
+      contactError: contact.error,
+      submitContact: e => this.submitNetlifyForm(e, 'contact'),
+      resetContact: () => this.formEvent('contact', 'reset'),
+      wireSent: wire.sent, wireNotSent: wire.notSent,
+      wireError: wire.error,
+      submitWire: e => this.submitNetlifyForm(e, 'wire'),
+      resetWire: () => this.formEvent('wire', 'reset')
     };
   }
 }
